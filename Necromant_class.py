@@ -6,8 +6,7 @@ class Necromant:
     skeletons = {'waiter': 0,
                  'farmer': 0,
                  'defer': 0,
-                 'attacker': 0,
-                 }
+                 'attacker': 0}
 
     def add_enegry(self, change=1):
         self.energy += change
@@ -36,3 +35,6 @@ class Necromant:
         if skeleton_type not in self.skeletons.keys():
             print('Error class Necromant set_skeletons')
         self.skeletons[skeleton_type] = self.skeletons[skeleton_type] + count
+
+    def lvlup(self):
+        self.level += 1

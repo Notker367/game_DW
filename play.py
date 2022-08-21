@@ -3,18 +3,23 @@ import logic
 
 user = Necromant_class.Necromant()
 
-print(logic.me_info())
+logic.me_info()
 
-logic.wait()
+logic.wait(5)
 
-print(logic.me_info())
-
-logic.go_work()
 logic.kill_human()
 logic.kill_human()
-
-print(logic.me_info())
 
 logic.create_skeleton()
 
-print(logic.me_info())
+logic.skeleton_go_to('farmer')
+
+logic.take_from_farm_bone(4)
+
+logic.create_skeleton()
+
+logic.skeleton_go_to('attacker')
+
+logic.attack(0, 1)
+
+logic.me_info()
