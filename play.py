@@ -1,13 +1,13 @@
-import Necromant_class
 import logic
 
-user = Necromant_class.Necromant()
+user = logic.create_user()
 
-logic.me_info()
+logic.kill_human(user)
 
+'''
 logic.wait(5)
 
-logic.kill_human()
+logic.kill_human(user)
 logic.kill_human()
 
 logic.create_skeleton()
@@ -21,5 +21,7 @@ logic.create_skeleton()
 logic.skeleton_go_to('attacker')
 
 logic.attack(0, 1)
+'''
+print(logic.user_info(user))
 
-logic.me_info()
+

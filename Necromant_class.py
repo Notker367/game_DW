@@ -1,12 +1,15 @@
 class Necromant:
-    energy = 0
-    bones = 0
-    gold = 0
-    level = 0
-    skeletons = {'waiter': 0,
-                 'farmer': 0,
-                 'defer': 0,
-                 'attacker': 0}
+
+    def __init__(self, chat_id):
+        self.chat_id = chat_id
+        self.energy = 0
+        self.bones = 0
+        self.gold = 0
+        self.level = 0
+        self.skeletons = {'waiter': 0,
+                          'farmer': 0,
+                          'defer': 0,
+                          'attacker': 0}
 
     def add_enegry(self, change=1):
         self.energy += change
@@ -38,3 +41,6 @@ class Necromant:
 
     def lvlup(self):
         self.level += 1
+
+    def set_lvl(self,lvl):
+        self.level = lvl
