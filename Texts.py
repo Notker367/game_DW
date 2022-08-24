@@ -16,3 +16,4 @@ class Text_for:
               'to_farmer': 'Искать кости',
               'to_defer': 'На охрану дома',
               'to_attacker': 'В армию наступления'}
+пиво
