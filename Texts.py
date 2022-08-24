@@ -14,6 +14,5 @@ class Text_for:
               'work': 'Работать в госпитале',
               'bones_to_skeleton': 'Создать скелета',
               'to_farmer': 'Искать кости',
-              'to_defer': 'На охрану дома',
-              'to_attacker': 'В армию наступления'}
-пиво
+              'to_defer': 'Охрана дома',
+              'to_attacker': 'В наступление'}
