@@ -145,40 +145,42 @@ def text_reader(me, text, time=0):
 
 
 def manual_collback(me, text):
-    kill_hum = text == Text_for.button['kill_hum']
-    work = text == Text_for.button['work']
+    need_kill_hum = text == Text_for.button['kill_hum']
+    need_work = text == Text_for.button['work']
     energy = energy_check(me)
-    if kill_hum and energy:
+    if need_kill_hum and energy:
         kill_human(me)
         need_send_user(me, Text_for.complite['kill_hum'])
-    elif work and energy:
+    elif need_work and energy:
         go_work(me)
         need_send_user(me, Text_for.complite['work'])
-    elif work:
+    elif (need_work or need_kill_hum) and not energy:
         need_send_user(me, Text_for.Error['no_energy'])
 
 
 def skel_create_collback(me, text):
-    if text == Text_for.button['bones_to_skeleton'] \
-            and bones_check(me, balance.skeleton_need_bones):
+    need_skel_create = text == Text_for.button['bones_to_skeleton']
+    have_bones = bones_check(me, balance.skeleton_need_bones)
+    if need_skel_create and have_bones:
         create_skeleton(me)
         need_send_user(me, Text_for.complite['bones_to_skeleton'])
-    else:
+    elif need_skel_create and not have_bones:
         need_send_user(me, Text_for.Error['no_bones'])
 
 
 def skel_work_collback(me, text):
-    if text == Text_for.button['to_farmer'] \
-            and skeleton_waiter_check(me):
+    need_farmer = text == Text_for.button['to_farmer']
+    need_defer = text == Text_for.button['to_defer']
+    need_attacker = text == Text_for.button['to_attacker']
+    have_waiter = skeleton_waiter_check(me)
+    if need_farmer and have_waiter:
         skeleton_go_to(me, 'farmer')
         need_send_user(me, Text_for.complite['to_farmer'])
-    elif text == Text_for.button['to_defer'] \
-            and skeleton_waiter_check(me):
+    elif need_defer and have_waiter:
         skeleton_go_to(me, 'defer')
         need_send_user(me, Text_for.complite['to_defer'])
-    elif text == Text_for.button['to_attacker'] \
-            and skeleton_waiter_check(me):
+    elif need_attacker and have_waiter:
         skeleton_go_to(me, 'attacker')
         need_send_user(me, Text_for.complite['to_attacker'])
-    else:
+    elif (need_farmer or need_defer or need_attacker) and not have_waiter:
         need_send_user(me, Text_for.Error['no_waiter'])
