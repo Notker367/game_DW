@@ -46,7 +46,7 @@ def go_work(me):
 
 
 def create_skeleton(me):
-    me.take_energy(1)
+    #me.take_energy(1)
     me.take_bones(balance.skeleton_need_bones)
     me.set_skeletons('waiter', 1)
 
