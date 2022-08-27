@@ -6,6 +6,7 @@ class Necromant:
         self.bones = 0
         self.gold = 0
         self.level = 0
+        self.keyboard = []
         self.skeletons = {'waiter': 0,
                           'farmer': 0,
                           'defer': 0,
@@ -24,10 +25,10 @@ class Necromant:
         self.bones -= change
 
     def add_gold(self, change):
-        self.bones += change
+        self.gold += change
 
     def take_gold(self, change):
-        self.bones -= change
+        self.gold -= change
 
     def get_skeletons(self, skeleton_type):
         if skeleton_type not in self.skeletons.keys():
@@ -42,5 +43,11 @@ class Necromant:
     def lvlup(self):
         self.level += 1
 
-    def set_lvl(self,lvl):
+    def set_lvl(self, lvl):
         self.level = lvl
+
+    def get_keyboard(self):
+        return self.keyboard
+
+    def set_keyboard(self, buttons: list):
+        self.keyboard = buttons

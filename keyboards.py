@@ -5,6 +5,7 @@ import Texts
 k_button = bot.types.KeyboardButton
 text_b = Texts.Text_for.button
 
+
 def keyboard_create(buttons):
     keyboard = bot.types.ReplyKeyboardMarkup(resize_keyboard=True)
     if 'info' in buttons:

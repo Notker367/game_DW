@@ -19,7 +19,8 @@ def why_me(message):
 def start(message):
     logic.create_user(message.chat.id)
     user = why_me(message)
-    keyboard = keyboards.keyboard_create(['info', 'manual', 'skel_create', 'skel_work'])
+    logic.set_active_keyboard(user, ['info', 'manual', 'skel_create', 'skel_work'])
+    keyboard = keyboards.keyboard_create(logic.get_active_keyboard(user))
     bot.send_message(message.chat.id, f"Создан некр {user.chat_id}", reply_markup=keyboard)
 
 
@@ -27,7 +28,7 @@ def start(message):
 def admin(message):
     text = message.text
     if text == '/admin':
-        bot.send_message(message.chat.id, Texts.Text_for.text_admin)
+        bot.send_message(message.chat.id, Texts.Text_for.admin)
     else:
         user = why_me(message)
         admin_commands.cheats(user, text)
@@ -42,7 +43,13 @@ def info(message):
 
 @bot.message_handler(content_types=['text'])
 def request(message):
-    bot.send_message(message.chat.id, "Ответ на что угодно")
+    user = why_me(message)
+    logic.text_reader(user, message.text)
+    bot.send_message(user.chat_id, logic.need_send_user(user, read=1))
+
+
+def bot_send(user, text):
+    bot.send_message(user.chat_id, text)
 
 
 bot.polling()

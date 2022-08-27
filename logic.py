@@ -1,13 +1,23 @@
 import Necromant_class
 import balance
+from Texts import Text_for
 
 user_list = {}
+request_test = {}
 
 
 def create_user(chat_id='test'):
     new_user = Necromant_class.Necromant(chat_id)
     user_list.update({chat_id: new_user})
     return new_user
+
+
+def get_active_keyboard(me: Necromant_class):
+    return me.get_keyboard()
+
+
+def set_active_keyboard(me: Necromant_class, buttons):
+    me.set_keyboard(buttons)
 
 
 def get_user(chat_id):
@@ -17,6 +27,12 @@ def get_user(chat_id):
     else:
         return False, create_user()
 
+
+def need_send_user(me, texts='need_send_user пустой текст', read=0):
+    user_id = me.chat_id
+    if read and user_id in request_test.keys():
+        return request_test[user_id]
+    request_test[user_id] = texts
 
 
 def kill_human(me):
@@ -31,7 +47,7 @@ def go_work(me):
 
 def create_skeleton(me):
     me.take_energy(1)
-    me.take_bones(balance.skeleton_for_bones)
+    me.take_bones(balance.skeleton_need_bones)
     me.set_skeletons('waiter', 1)
 
 
@@ -39,7 +55,7 @@ def skeleton_go_to(me, work, count=1):
     """Ввести из farmer defer attacker"""
     if work not in me.skeletons:
         print('Error skeleton_go_to type')
-    me.set_skeletons('waiter', -1)
+    me.set_skeletons('waiter', count * -1)
     me.set_skeletons(work, count)
 
 
@@ -83,4 +99,86 @@ def wait(me, count=1):
 
 
 def user_info(me):
-    return f'{me.chat_id}:\nenergy = {me.energy}, \nbones = {me.bones}, \ngold = {me.gold}, \nlevel = {me.level}, \nskeletons = {me.skeletons}\n'
+    return f'{me.chat_id}:\nenergy = {me.energy}, ' \
+           f'\nbones = {me.bones}, ' \
+           f'\ngold = {me.gold}, ' \
+           f'\nlevel = {me.level}, ' \
+           f'\nskeletons = {me.skeletons}\n'
+
+
+def energy_check(me, need_energy=1):
+    if me.energy >= need_energy:
+        have_energy = True
+    else:
+        have_energy = False
+    return have_energy
+
+
+def skeleton_waiter_check(me, need_waiter=1):
+    if me.skeletons['waiter'] >= need_waiter:
+        return True
+    else:
+        return False
+
+
+def bones_check(me, need_bones):
+    if me.bones >= need_bones:
+        return True
+    else:
+        return False
+
+
+def text_reader(me, text, time=0):
+    # print('Error text_reader')
+    params = me.get_keyboard()
+    # ['info', 'manual', 'skel_create', 'skel_work']
+    if text not in Text_for.button.values():
+        need_send_user(me, Text_for.Error['no_comands'])
+    if 'manual' in params:
+        manual_collback(me, text)
+    if 'skel_create' in params:
+        skel_create_collback(me, text)
+    if 'skel_work' in params:
+        skel_work_collback(me, text)
+    return
+    # need_send_user(me, request_text)
+
+
+def manual_collback(me, text):
+    kill_hum = text == Text_for.button['kill_hum']
+    work = text == Text_for.button['work']
+    energy = energy_check(me)
+    if kill_hum and energy:
+        kill_human(me)
+        need_send_user(me, Text_for.complite['kill_hum'])
+    elif work and energy:
+        go_work(me)
+        need_send_user(me, Text_for.complite['work'])
+    elif work:
+        need_send_user(me, Text_for.Error['no_energy'])
+
+
+def skel_create_collback(me, text):
+    if text == Text_for.button['bones_to_skeleton'] \
+            and bones_check(me, balance.skeleton_need_bones):
+        create_skeleton(me)
+        need_send_user(me, Text_for.complite['bones_to_skeleton'])
+    else:
+        need_send_user(me, Text_for.Error['no_bones'])
+
+
+def skel_work_collback(me, text):
+    if text == Text_for.button['to_farmer'] \
+            and skeleton_waiter_check(me):
+        skeleton_go_to(me, 'farmer')
+        need_send_user(me, Text_for.complite['to_farmer'])
+    elif text == Text_for.button['to_defer'] \
+            and skeleton_waiter_check(me):
+        skeleton_go_to(me, 'defer')
+        need_send_user(me, Text_for.complite['to_defer'])
+    elif text == Text_for.button['to_attacker'] \
+            and skeleton_waiter_check(me):
+        skeleton_go_to(me, 'attacker')
+        need_send_user(me, Text_for.complite['to_attacker'])
+    else:
+        need_send_user(me, Text_for.Error['no_waiter'])

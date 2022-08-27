@@ -5,4 +5,4 @@ bones_for_kill_human = 20
 gold_for_work = 20
 
 # skeleton
-skeleton_for_bones = 20
+skeleton_need_bones = 20
