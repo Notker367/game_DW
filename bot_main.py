@@ -1,12 +1,10 @@
-import balance
 import config
 import telebot
 import logic
 import admin_commands
 import keyboards
 import Texts
-import time
-import random
+
 
 bot = telebot.TeleBot(config.key)
 
@@ -66,6 +64,11 @@ def callback(call):
     user = why_me(call.message)
     if call.data == 'confirm':
         bot.send_message(user.chat_id, 'confirm')
+    if call.data == 'start_attack':
+        logic.attack(user)
+        bot.send_message(user.chat_id, 'cancel_attack')
+    if call.data == 'cancel_attack':
+        bot.send_message(user.chat_id, 'cancel_attack')
 
 
 def bot_send(user, text):

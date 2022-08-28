@@ -1,4 +1,5 @@
 import logic
+import balance
 
 user = logic.create_user()
 
@@ -24,4 +25,4 @@ logic.attack(0, 1)
 '''
 print(logic.user_info(user))
 
-
+print(balance.roll(0, 0))

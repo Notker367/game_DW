@@ -71,11 +71,24 @@ def farm_bone(me, iteration=1):
     me.bones += me.skeletons.get('farmer') * 5 * iteration
 
 
-def attack(me, skeletons_death=0):
-    me.bones += me.skeletons.get('attacker') * balance.bones_for_kill_skeleton
-    me.set_skeletons('attacker', skeletons_death * -1)
-    if balance.roll() <= balance.change_read_book:
-        me.lvlup()
+def attack(me):
+    guards = 1
+    skeletons = me.skeletons.get('attacker')
+    lost = fight(guards, skeletons, balance.win_skels_change_attack)
+    guards_lost, skeletons_lost = lost[0], lost[1]
+    skeletons_death = skeletons - skeletons_lost
+    after_fight = guards - guards_lost * balance.bones_for_kill_guard \
+                  + skeletons_death * balance.bones_for_kill_skeleton
+    skeletons_win = lost[0] == 0
+    if skeletons_win:
+        me.add_bones(after_fight)
+        if balance.roll() <= balance.change_read_book:
+            me.lvlup()
+    else:
+        me.take_gold(lost[0] * balance.gold_for_rouge)
+    me.set_skeletons('attacker', skeletons_lost)
+    return Text_for.event_text['skeletons_win'] if skeletons_win \
+        else Text_for.event_text['skeletons_lost']
 
 
 def event_def(me, rouges=1):
@@ -92,12 +105,20 @@ def event_def(me, rouges=1):
 
 
 def fight(units, skels, win_skels_change):
+    """
+    Битва пока кого-то не станет 0
+
+    :param units: Кол-во противников
+    :param skels: Кол-во скелетов
+    :param win_skels_change: Шанс что выграет скилет 1 на 1 с units в %
+    :return: list[units, skels]
+    """
     bg = [units, skels, 1]
     while 0 in bg:
         if balance.roll() <= win_skels_change:
-            bg = [0, skels - units, 1]
+            bg = [0, skels - units]
         else:
-            bg = [units - skels, 0, 0]
+            bg = [units - skels, 0]
     return bg
 
 
@@ -228,15 +249,15 @@ def skel_work_collback(me, text):
 
 
 def why_event(me):
-    roll = balance.roll()
-    rouges = roll(1, (me.gold // balance.gold_for_rouge))
+    roll_event = balance.roll()
     attackers = me.skeletons['attacker']
-    skeleton_death_in_attack = roll(0, attackers)
-    if roll <= balance.event_def_roll:
+    if roll_event <= balance.event_def_roll \
+            and me.gold >= balance.gold_for_def_event:  # def_event
+        rouges = balance.roll(0, (me.gold // balance.gold_for_rouge))
         event_def(me, rouges)
         return Text_for.event_text['def'], keyboards.keyboard_inline_create(['confirm'])
-    elif roll <= balance.event_def_roll and attackers >= balance.need_attackers_for_attack:
-        attack(me, roll(0, skeleton_death_in_attack))
+    elif roll_event <= balance.event_attack_roll \
+            and attackers >= balance.need_attackers_for_attack_event:  # attack event
         return Text_for.event_text['attack'], keyboards.keyboard_inline_create(['attack'])
     else:
         return Text_for.event_text['none'], None
