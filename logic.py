@@ -88,7 +88,7 @@ def attack(me):
         me.take_gold(lost[0] * balance.gold_for_rouge)
     me.set_skeletons('attacker', skeletons_lost)
     return Text_for.event_text['skeletons_win'] if skeletons_win \
-        else Text_for.event_text['skeletons_lost']
+        else Text_for.event_text['skeletons_lose']
 
 
 def event_def(me, rouges=1):
