@@ -25,7 +25,7 @@ def get_user(chat_id):
     if chat_id in users:
         return True, user_list[chat_id]
     else:
-        return False, create_user()
+        return False, create_user(str(chat_id))
 
 
 def need_send_user(me, texts='need_send_user пустой текст', read=0):
@@ -33,6 +33,7 @@ def need_send_user(me, texts='need_send_user пустой текст', read=0):
     if read and user_id in request_test.keys():
         return request_test[user_id]
     request_test[user_id] = texts
+    return texts
 
 
 def kill_human(me):
@@ -46,7 +47,7 @@ def go_work(me):
 
 
 def create_skeleton(me):
-    #me.take_energy(1)
+    # me.take_energy(1)
     me.take_bones(balance.skeleton_need_bones)
     me.set_skeletons('waiter', 1)
 
@@ -133,7 +134,7 @@ def text_reader(me, text, time=0):
     params = me.get_keyboard()
     # ['info', 'manual', 'skel_create', 'skel_work']
     if text not in Text_for.button.values():
-        need_send_user(me, Text_for.Error['no_comands'])
+        need_send_user(me, Text_for.Error['no_commands'])
     if 'manual' in params:
         manual_collback(me, text)
     if 'skel_create' in params:

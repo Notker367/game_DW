@@ -22,7 +22,7 @@ class Text_for:
     Error = {'no_energy': 'Не хватает энергии',
              'no_bones': 'Не хватает костей',
              'no_waiter': 'Нет свободных скелетов',
-             'no_comands': 'Нет такой команды'}
+             'no_commands': 'Нет такой команды'}
     complite = {'kill_hum': f'Вы нашли бедалагу которого никто не вспомнит '
                             f'\n +{balance.bones_for_kill_human} костей',
                 'work': f'После тяжелого рабочего дня '
