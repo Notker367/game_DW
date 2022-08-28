@@ -3,7 +3,8 @@ import balance
 from Texts import Text_for
 
 user_list = {}
-request_test = {}
+request_text = {}
+users_time = {}
 
 
 def create_user(chat_id='test'):
@@ -30,9 +31,9 @@ def get_user(chat_id):
 
 def need_send_user(me, texts='need_send_user пустой текст', read=0):
     user_id = me.chat_id
-    if read and user_id in request_test.keys():
-        return request_test[user_id]
-    request_test[user_id] = texts
+    if read and user_id in request_text.keys():
+        return request_text[user_id]
+    request_text[user_id] = texts
     return texts
 
 
@@ -95,8 +96,29 @@ def fight(units, skels):
     return bg
 
 
-def wait(me, count=1):
-    me.add_enegry(count)
+def time_step(me, time):
+    try:
+        prew_time = users_time[me.chat_id]
+    except:
+        users_time[me.chat_id] = time
+        return
+    d_time = time - prew_time
+    step_energy(me, d_time)
+    users_time[me.chat_id] = time
+
+
+def step_energy(me, time):
+    need_add_energy = time // balance.time_for_add_energy
+    energy_after = me.energy + need_add_energy
+    if energy_after > balance.max_energy:
+        me.energy = balance.max_energy
+    elif energy_after <= balance.max_energy:
+        me.add_energy(need_add_energy)
+    else:
+        print('Error logic step_energy')
+
+def energy_add(me, count=1):
+    me.add_energy(count)
 
 
 def user_info(me):
@@ -129,7 +151,7 @@ def bones_check(me, need_bones):
         return False
 
 
-def text_reader(me, text, time=0):
+def text_reader(me, text):
     # print('Error text_reader')
     params = me.get_keyboard()
     # ['info', 'manual', 'skel_create', 'skel_work']

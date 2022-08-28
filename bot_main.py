@@ -45,6 +45,7 @@ def info(message):
 def request(message):
     user = why_me(message)
     logic.text_reader(user, message.text)
+    logic.time_step(user, message.date)
     bot.send_message(user.chat_id, logic.need_send_user(user, read=1))
 
 

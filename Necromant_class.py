@@ -12,7 +12,7 @@ class Necromant:
                           'defer': 0,
                           'attacker': 0}
 
-    def add_enegry(self, change=1):
+    def add_energy(self, change=1):
         self.energy += change
 
     def take_energy(self, change=1):
