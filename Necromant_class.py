@@ -11,6 +11,7 @@ class Necromant:
                           'farmer': 0,
                           'defer': 0,
                           'attacker': 0}
+        self.cd_event = 0
 
     def add_energy(self, change=1):
         self.energy += change

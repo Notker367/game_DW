@@ -1,10 +1,12 @@
 import Necromant_class
 import balance
+import keyboards
 from Texts import Text_for
 
 user_list = {}
 request_text = {}
 users_time = {}
+need_event = False
 
 
 def create_user(chat_id='test'):
@@ -69,30 +71,33 @@ def farm_bone(me, iteration=1):
     me.bones += me.skeletons.get('farmer') * 5 * iteration
 
 
-def attack(me, skeletons_death=0, change_read_book=0):
-    me.bones += me.skeletons.get('attacker') * 5
+def attack(me, skeletons_death=0):
+    me.bones += me.skeletons.get('attacker') * balance.bones_for_kill_skeleton
     me.set_skeletons('attacker', skeletons_death * -1)
-    if change_read_book == 1:
+    if balance.roll() <= balance.change_read_book:
         me.lvlup()
 
 
 def event_def(me, rouges=1):
     def_skels = me.skeletons.get('defer')
-    lost = fight(rouges, def_skels)
-    after_fight = rouges - lost[0] * 10 + def_skels - lost[1] * 5
+    lost = fight(rouges, def_skels, balance.win_skels_change_def)
+    after_fight = rouges - lost[0] * balance.bones_for_kill_rouge \
+                  + def_skels - lost[1] * balance.bones_for_kill_skeleton
     me.set_skeletons('defer', def_skels - lost[1] * -1)
-    win_skels = lost[2]
-    if win_skels:
+    skeletons_win = lost[0] == 0
+    if skeletons_win:
         me.add_bones(after_fight)
     else:
-        me.take_gold(lost[0] * 10)
+        me.take_gold(lost[0] * balance.gold_for_rouge)
 
 
-def fight(units, skels):
-    if skels >= units:
-        bg = [0, skels - units, 1]
-    else:
-        bg = [units - skels, 0, 0]
+def fight(units, skels, win_skels_change):
+    bg = [units, skels, 1]
+    while 0 in bg:
+        if balance.roll() <= win_skels_change:
+            bg = [0, skels - units, 1]
+        else:
+            bg = [units - skels, 0, 0]
     return bg
 
 
@@ -104,7 +109,18 @@ def time_step(me, time):
         return
     d_time = time - prew_time
     step_energy(me, d_time)
+    check_event(me, d_time)
     users_time[me.chat_id] = time
+
+
+def check_event(me, time):
+    global need_event
+    if me.cd_event <= 0:
+        me.cd_event = balance.event_cd
+        need_event = True
+    else:
+        me.cd_event = me.cd_event - time
+        need_event = False
 
 
 def step_energy(me, time):
@@ -117,6 +133,7 @@ def step_energy(me, time):
     else:
         print('Error logic step_energy')
 
+
 def energy_add(me, count=1):
     me.add_energy(count)
 
@@ -126,6 +143,7 @@ def user_info(me):
            f'\nbones = {me.bones}, ' \
            f'\ngold = {me.gold}, ' \
            f'\nlevel = {me.level}, ' \
+           f'\ntest = {me.cd_event}\n' \
            f'\nskeletons = {me.skeletons}\n'
 
 
@@ -207,3 +225,18 @@ def skel_work_collback(me, text):
         need_send_user(me, Text_for.complite['to_attacker'])
     elif (need_farmer or need_defer or need_attacker) and not have_waiter:
         need_send_user(me, Text_for.Error['no_waiter'])
+
+
+def why_event(me):
+    roll = balance.roll()
+    rouges = roll(1, (me.gold // balance.gold_for_rouge))
+    attackers = me.skeletons['attacker']
+    skeleton_death_in_attack = roll(0, attackers)
+    if roll <= balance.event_def_roll:
+        event_def(me, rouges)
+        return Text_for.event_text['def'], keyboards.keyboard_inline_create(['confirm'])
+    elif roll <= balance.event_def_roll and attackers >= balance.need_attackers_for_attack:
+        attack(me, roll(0, skeleton_death_in_attack))
+        return Text_for.event_text['attack'], keyboards.keyboard_inline_create(['attack'])
+    else:
+        return Text_for.event_text['none'], None
