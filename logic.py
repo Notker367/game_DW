@@ -94,7 +94,7 @@ def event_def(me, rouges=1):
     lost = fight(rouges, def_skels, balance.win_skels_change_def)
     after_fight = rouges - lost[0] * balance.bones_for_kill_rouge \
                   + def_skels - lost[1] * balance.bones_for_kill_skeleton
-    me.set_skeletons('defer', def_skels - lost[1] * -1)
+    me.set_skeletons('defer', (def_skels - lost[1]) * -1)
     skeletons_win = lost[0] == 0
     if skeletons_win:
         me.add_bones(after_fight)

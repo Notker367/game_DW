@@ -22,7 +22,7 @@ time_for_add_energy = 5  # sec
 # events
 event_cd = 5  # sec
 
-event_def_roll = 10  # %
+event_def_roll = 20  # %
 event_attack_roll = 30  # %
 
 # fight
