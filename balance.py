@@ -23,7 +23,7 @@ time_for_add_energy = 5  # sec
 event_cd = 5  # sec
 
 event_def_roll = 20  # %
-event_attack_roll = 30  # %
+event_attack_roll = event_def_roll + 20  # %
 
 # fight
 win_skels_change_def = 60  # %

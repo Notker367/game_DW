@@ -77,7 +77,7 @@ def event_attack(me):
     lost = fight(guards, skeletons, balance.win_skels_change_attack)
     guards_lost, skeletons_lost = lost[0], lost[1]
     skeletons_death = skeletons - skeletons_lost
-    after_fight = guards - guards_lost * balance.bones_for_kill_guard \
+    after_fight = (guards - guards_lost) * balance.bones_for_kill_guard \
                   + skeletons_death * balance.bones_for_kill_skeleton
     skeletons_win = lost[0] == 0
     if skeletons_win:
