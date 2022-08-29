@@ -65,7 +65,7 @@ def callback(call):
     if call.data == 'confirm':
         bot.send_message(user.chat_id, 'confirm')
     if call.data == 'start_attack':
-        text = logic.attack(user)
+        text = logic.event_attack(user)
         bot.send_message(user.chat_id, text)
     if call.data == 'cancel_attack':
         bot.send_message(user.chat_id, 'cancel_attack')

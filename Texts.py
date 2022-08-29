@@ -39,4 +39,4 @@ class Text_for:
                   'none': 'Ничего не произошло',
                   'attack': 'Отличное время для атаки. Хотите её начать?',
                   'skeletons_win': 'Скелеты победили',
-                  'skeleton_lose': 'ti loh'}
+                  'skeletons_lose': 'ti loh'}

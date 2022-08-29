@@ -71,7 +71,7 @@ def farm_bone(me, iteration=1):
     me.bones += me.skeletons.get('farmer') * 5 * iteration
 
 
-def attack(me):
+def event_attack(me):
     guards = 1
     skeletons = me.skeletons.get('attacker')
     lost = fight(guards, skeletons, balance.win_skels_change_attack)
@@ -84,9 +84,7 @@ def attack(me):
         me.add_bones(after_fight)
         if balance.roll() <= balance.change_read_book:
             me.lvlup()
-    else:
-        me.take_gold(lost[0] * balance.gold_for_rouge)
-    me.set_skeletons('attacker', skeletons_lost)
+    me.set_skeletons('attacker', skeletons_death * -1)
     return Text_for.event_text['skeletons_win'] if skeletons_win \
         else Text_for.event_text['skeletons_lose']
 
@@ -113,12 +111,12 @@ def fight(units, skels, win_skels_change):
     :param win_skels_change: Шанс что выграет скилет 1 на 1 с units в %
     :return: list[units, skels]
     """
-    bg = [units, skels, 1]
-    while 0 in bg:
+    bg = [units, skels]
+    while not (0 in bg):
         if balance.roll() <= win_skels_change:
-            bg = [0, skels - units]
+            bg[0] -= 1
         else:
-            bg = [units - skels, 0]
+            bg[1] -= 1
     return bg
 
 
