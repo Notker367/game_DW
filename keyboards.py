@@ -51,9 +51,9 @@ def keyboard_inline_create(buttons=[]):
     """
     описание
 
-    :param buttons: confirm,attack
+    :param: buttons: confirm,attack
 
-    :return:
+    :return: sad
     """
     keyboard = bot.types.InlineKeyboardMarkup()
     if 'confirm' in buttons:
