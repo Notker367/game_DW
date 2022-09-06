@@ -1,6 +1,6 @@
 import telebot as bot
 
-import Texts
+from View import Texts
 
 k_button = bot.types.KeyboardButton
 text_button = Texts.Text_for.button

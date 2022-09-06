@@ -1,10 +1,7 @@
 import config
 import telebot
-import logic
-import admin_commands
-import keyboards
-import Texts
-
+from Model import logic, admin_commands
+from View import keyboards, Texts
 
 bot = telebot.TeleBot(config.key)
 

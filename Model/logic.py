@@ -1,7 +1,6 @@
-import Necromant_class
-import balance
-import keyboards
-from Texts import Text_for
+from Model import Necromant_class, balance
+from View import keyboards, bot_send
+from View.Texts import Text_for
 
 user_list = {}
 request_text = {}
@@ -12,6 +11,7 @@ need_event = False
 def create_user(chat_id='test'):
     new_user = Necromant_class.Necromant(chat_id)
     user_list.update({chat_id: new_user})
+    bot_send.message(chat_id, 'hello')
     return new_user
 
 
