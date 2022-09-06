@@ -17,27 +17,19 @@ def why_me(message):
 def start(message):
     logic.create_user(message.chat.id)
     user = why_me(message)
-    logic.set_active_keyboard(user, ['info', 'manual', 'skel_create', 'skel_work'])
-    keyboard = keyboards.keyboard_create(logic.get_active_keyboard(user))
-    bot.send_message(message.chat.id, f"Создан некр {user.chat_id}", reply_markup=keyboard)
 
 
 @bot.message_handler(commands=["admin"])
 def admin(message):
-    text = message.text
-    if text == '/admin':
-        bot.send_message(message.chat.id, Texts.Text_for.admin)
-    else:
-        user = why_me(message)
-        admin_commands.cheats(user, text)
-        bot.send_message(message.chat.id, 'OK')
+    user = why_me(message)
+    logic.admin_command(user, message.text)
 
 
 @bot.message_handler(commands=["info"])
 def info(message):
     user = why_me(message)
     logic.time_step(user, message.date)
-    bot.send_message(message.chat.id, logic.user_info(user))
+    logic.user_info(user)
 
 
 @bot.message_handler(content_types=['text'])

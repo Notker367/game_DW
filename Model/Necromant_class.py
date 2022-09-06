@@ -52,3 +52,11 @@ class Necromant:
 
     def set_keyboard(self, buttons: list):
         self.keyboard = buttons
+
+    def info(self):
+        return f'{self.chat_id}:\nenergy = {self.energy}, ' \
+               f'\nbones = {self.bones}, ' \
+               f'\ngold = {self.gold}, ' \
+               f'\nlevel = {self.level}, ' \
+               f'\ntest = {self.cd_event}\n' \
+               f'\nskeletons = {self.skeletons}\n'

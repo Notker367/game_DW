@@ -1,5 +1,5 @@
 from Model import Necromant_class, balance
-from View import keyboards, bot_send
+from View import keyboards, bot_send, callbacks
 from View.Texts import Text_for
 
 user_list = {}
@@ -11,7 +11,7 @@ need_event = False
 def create_user(chat_id='test'):
     new_user = Necromant_class.Necromant(chat_id)
     user_list.update({chat_id: new_user})
-    bot_send.message(chat_id, 'hello')
+    callbacks.create(new_user)
     return new_user
 
 
@@ -157,13 +157,8 @@ def energy_add(me, count=1):
     me.add_energy(count)
 
 
-def user_info(me):
-    return f'{me.chat_id}:\nenergy = {me.energy}, ' \
-           f'\nbones = {me.bones}, ' \
-           f'\ngold = {me.gold}, ' \
-           f'\nlevel = {me.level}, ' \
-           f'\ntest = {me.cd_event}\n' \
-           f'\nskeletons = {me.skeletons}\n'
+def user_info(user):
+    bot_send.message(user, user.info())
 
 
 def energy_check(me, need_energy=1):
@@ -259,3 +254,28 @@ def why_event(me):
         return Text_for.event_text['attack'], keyboards.keyboard_inline_create(['attack'])
     else:
         return Text_for.event_text['none'], None
+
+
+def admin_command(user, text):
+    if text == '/admin':
+        bot_send.message(user, Text_for.admin)
+    else:
+        text = text.split()
+        if len(text) == 3:
+            if text[1] == 'energy':
+                user.add_energy(int(text[2]))
+            elif text[1] == 'bones':
+                user.add_bones(int(text[2]))
+            elif text[1] == 'gold':
+                user.add_gold(int(text[2]))
+            elif text[1] == 'level':
+                user.set_lvl(int(text[2]))
+            else:
+                bot_send.message(user, 'huity napisal')
+        elif len(text) == 4:
+            if text[1] == 'skeletons':
+                user.set_skeletons(text[2], int(text[3]))
+            else:
+                bot_send.message(user, 'huity napisal')
+        else:
+            bot_send.message(user, 'Не верное количество аргументов')
