@@ -205,32 +205,32 @@ def manual_callback(user, text):
         bot_send.message(user, Text_for.Error['no_energy'])
 
 
-def skel_create_callback(me, text):
+def skel_create_callback(user, text):
     need_skel_create = text == Text_for.button['bones_to_skeleton']
-    have_bones = bones_check(me, balance.skeleton_need_bones)
+    have_bones = bones_check(user, balance.skeleton_need_bones)
     if need_skel_create and have_bones:
-        create_skeleton(me)
-        need_send_user(me, Text_for.complite['bones_to_skeleton'])
+        create_skeleton(user)
+        bot_send.message(user, Text_for.complite['bones_to_skeleton'])
     elif need_skel_create and not have_bones:
-        need_send_user(me, Text_for.Error['no_bones'])
+        bot_send.message(user, Text_for.Error['no_bones'])
 
 
-def skel_work_callback(me, text):
+def skel_work_callback(user, text):
     need_farmer = text == Text_for.button['to_farmer']
     need_defer = text == Text_for.button['to_defer']
     need_attacker = text == Text_for.button['to_attacker']
-    have_waiter = skeleton_waiter_check(me)
+    have_waiter = skeleton_waiter_check(user)
     if need_farmer and have_waiter:
-        skeleton_go_to(me, 'farmer')
-        need_send_user(me, Text_for.complite['to_farmer'])
+        skeleton_go_to(user, 'farmer')
+        bot_send.message(user, Text_for.complite['to_farmer'])
     elif need_defer and have_waiter:
-        skeleton_go_to(me, 'defer')
-        need_send_user(me, Text_for.complite['to_defer'])
+        skeleton_go_to(user, 'defer')
+        bot_send.message(user, Text_for.complite['to_defer'])
     elif need_attacker and have_waiter:
-        skeleton_go_to(me, 'attacker')
-        need_send_user(me, Text_for.complite['to_attacker'])
+        skeleton_go_to(user, 'attacker')
+        bot_send.message(user, Text_for.complite['to_attacker'])
     elif (need_farmer or need_defer or need_attacker) and not have_waiter:
-        need_send_user(me, Text_for.Error['no_waiter'])
+        bot_send.message(user, Text_for.Error['no_waiter'])
 
 
 def why_event(me):
