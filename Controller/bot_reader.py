@@ -35,11 +35,17 @@ def info(message):
 @bot.message_handler(content_types=['text'])
 def request(message):
     user = why_me(message)
-    logic.text_reader(user, message.text)
-    logic.time_step(user, message.date)
-    bot.send_message(user.chat_id, logic.need_send_user(user, read=1))
-    if logic.need_event:
-        start_event(user)
+    options = logic.active_buttons(user)
+    text = message.text
+    # ['info', 'manual', 'skel_create', 'skel_work']
+    # if text not in options:
+    #    logic.not_have_commands(user)
+    if 'manual' in options:
+        logic.manual_callback(user, text)
+    if 'skel_create' in options:
+        logic.skel_create_callback(user, text)
+    if 'skel_work' in options:
+        logic.skel_work_callback(user, text)
 
 
 def start_event(user):

@@ -183,37 +183,29 @@ def bones_check(me, need_bones):
         return False
 
 
-def text_reader(me, text):
-    # print('Error text_reader')
-    params = me.get_keyboard()
-    # ['info', 'manual', 'skel_create', 'skel_work']
-    if text not in Text_for.button.values():
-        need_send_user(me, Text_for.Error['no_commands'])
-    if 'manual' in params:
-        manual_collback(me, text)
-    if 'skel_create' in params:
-        skel_create_collback(me, text)
-    if 'skel_work' in params:
-        skel_work_collback(me, text)
-    return
-    # need_send_user(me, request_text)
+def active_buttons(user):
+    return user.get_keyboard()
 
 
-def manual_collback(me, text):
+def not_have_commands(user):
+    bot_send.message(user, Text_for.Error['no_commands'])
+
+
+def manual_callback(user, text):
     need_kill_hum = text == Text_for.button['kill_hum']
     need_work = text == Text_for.button['work']
-    energy = energy_check(me)
+    energy = energy_check(user)
     if need_kill_hum and energy:
-        kill_human(me)
-        need_send_user(me, Text_for.complite['kill_hum'])
+        kill_human(user)
+        bot_send.message(user, Text_for.complite['kill_hum'])
     elif need_work and energy:
-        go_work(me)
-        need_send_user(me, Text_for.complite['work'])
+        go_work(user)
+        bot_send.message(user, Text_for.complite['work'])
     elif (need_work or need_kill_hum) and not energy:
-        need_send_user(me, Text_for.Error['no_energy'])
+        bot_send.message(user, Text_for.Error['no_energy'])
 
 
-def skel_create_collback(me, text):
+def skel_create_callback(me, text):
     need_skel_create = text == Text_for.button['bones_to_skeleton']
     have_bones = bones_check(me, balance.skeleton_need_bones)
     if need_skel_create and have_bones:
@@ -223,7 +215,7 @@ def skel_create_collback(me, text):
         need_send_user(me, Text_for.Error['no_bones'])
 
 
-def skel_work_collback(me, text):
+def skel_work_callback(me, text):
     need_farmer = text == Text_for.button['to_farmer']
     need_defer = text == Text_for.button['to_defer']
     need_attacker = text == Text_for.button['to_attacker']
