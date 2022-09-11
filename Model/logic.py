@@ -1,7 +1,6 @@
-import Necromant_class
-import balance
-import keyboards
-from Texts import Text_for
+from Model import roles, balance
+from View import keyboards, bot_send, callbacks
+from View.Texts import Text_for
 
 user_list = {}
 request_text = {}
@@ -10,16 +9,18 @@ need_event = False
 
 
 def create_user(chat_id='test'):
-    new_user = Necromant_class.Necromant(chat_id)
+    new_user = roles.Necromant(chat_id)
     user_list.update({chat_id: new_user})
+    callbacks.create(new_user)
+    bot_send.message(new_user, Text_for.welcome)
     return new_user
 
 
-def get_active_keyboard(me: Necromant_class):
+def get_active_keyboard(me: roles.Necromant):
     return me.get_keyboard()
 
 
-def set_active_keyboard(me: Necromant_class, buttons):
+def set_active_keyboard(me: roles.Necromant, buttons):
     me.set_keyboard(buttons)
 
 
@@ -157,13 +158,8 @@ def energy_add(me, count=1):
     me.add_energy(count)
 
 
-def user_info(me):
-    return f'{me.chat_id}:\nenergy = {me.energy}, ' \
-           f'\nbones = {me.bones}, ' \
-           f'\ngold = {me.gold}, ' \
-           f'\nlevel = {me.level}, ' \
-           f'\ntest = {me.cd_event}\n' \
-           f'\nskeletons = {me.skeletons}\n'
+def user_info(user):
+    bot_send.message(user, user.info())
 
 
 def energy_check(me, need_energy=1):
@@ -188,62 +184,54 @@ def bones_check(me, need_bones):
         return False
 
 
-def text_reader(me, text):
-    # print('Error text_reader')
-    params = me.get_keyboard()
-    # ['info', 'manual', 'skel_create', 'skel_work']
-    if text not in Text_for.button.values():
-        need_send_user(me, Text_for.Error['no_commands'])
-    if 'manual' in params:
-        manual_collback(me, text)
-    if 'skel_create' in params:
-        skel_create_collback(me, text)
-    if 'skel_work' in params:
-        skel_work_collback(me, text)
-    return
-    # need_send_user(me, request_text)
+def active_buttons(user):
+    return user.get_keyboard()
 
 
-def manual_collback(me, text):
+def not_have_commands(user):
+    bot_send.message(user, Text_for.Error['no_commands'])
+
+
+def manual_callback(user, text):
     need_kill_hum = text == Text_for.button['kill_hum']
     need_work = text == Text_for.button['work']
-    energy = energy_check(me)
+    energy = energy_check(user)
     if need_kill_hum and energy:
-        kill_human(me)
-        need_send_user(me, Text_for.complite['kill_hum'])
+        kill_human(user)
+        bot_send.message(user, Text_for.complite['kill_hum'])
     elif need_work and energy:
-        go_work(me)
-        need_send_user(me, Text_for.complite['work'])
+        go_work(user)
+        bot_send.message(user, Text_for.complite['work'])
     elif (need_work or need_kill_hum) and not energy:
-        need_send_user(me, Text_for.Error['no_energy'])
+        bot_send.message(user, Text_for.Error['no_energy'])
 
 
-def skel_create_collback(me, text):
+def skel_create_callback(user, text):
     need_skel_create = text == Text_for.button['bones_to_skeleton']
-    have_bones = bones_check(me, balance.skeleton_need_bones)
+    have_bones = bones_check(user, balance.skeleton_need_bones)
     if need_skel_create and have_bones:
-        create_skeleton(me)
-        need_send_user(me, Text_for.complite['bones_to_skeleton'])
+        create_skeleton(user)
+        bot_send.message(user, Text_for.complite['bones_to_skeleton'])
     elif need_skel_create and not have_bones:
-        need_send_user(me, Text_for.Error['no_bones'])
+        bot_send.message(user, Text_for.Error['no_bones'])
 
 
-def skel_work_collback(me, text):
+def skel_work_callback(user, text):
     need_farmer = text == Text_for.button['to_farmer']
     need_defer = text == Text_for.button['to_defer']
     need_attacker = text == Text_for.button['to_attacker']
-    have_waiter = skeleton_waiter_check(me)
+    have_waiter = skeleton_waiter_check(user)
     if need_farmer and have_waiter:
-        skeleton_go_to(me, 'farmer')
-        need_send_user(me, Text_for.complite['to_farmer'])
+        skeleton_go_to(user, 'farmer')
+        bot_send.message(user, Text_for.complite['to_farmer'])
     elif need_defer and have_waiter:
-        skeleton_go_to(me, 'defer')
-        need_send_user(me, Text_for.complite['to_defer'])
+        skeleton_go_to(user, 'defer')
+        bot_send.message(user, Text_for.complite['to_defer'])
     elif need_attacker and have_waiter:
-        skeleton_go_to(me, 'attacker')
-        need_send_user(me, Text_for.complite['to_attacker'])
+        skeleton_go_to(user, 'attacker')
+        bot_send.message(user, Text_for.complite['to_attacker'])
     elif (need_farmer or need_defer or need_attacker) and not have_waiter:
-        need_send_user(me, Text_for.Error['no_waiter'])
+        bot_send.message(user, Text_for.Error['no_waiter'])
 
 
 def why_event(me):
@@ -259,3 +247,28 @@ def why_event(me):
         return Text_for.event_text['attack'], keyboards.keyboard_inline_create(['attack'])
     else:
         return Text_for.event_text['none'], None
+
+
+def admin_command(user, text):
+    if text == '/admin':
+        bot_send.message(user, Text_for.admin)
+    else:
+        text = text.split()
+        if len(text) == 3:
+            if text[1] == 'energy':
+                user.add_energy(int(text[2]))
+            elif text[1] == 'bones':
+                user.add_bones(int(text[2]))
+            elif text[1] == 'gold':
+                user.add_gold(int(text[2]))
+            elif text[1] == 'level':
+                user.set_lvl(int(text[2]))
+            else:
+                bot_send.message(user, 'huity napisal')
+        elif len(text) == 4:
+            if text[1] == 'skeletons':
+                user.set_skeletons(text[2], int(text[3]))
+            else:
+                bot_send.message(user, 'huity napisal')
+        else:
+            bot_send.message(user, 'Не верное количество аргументов')

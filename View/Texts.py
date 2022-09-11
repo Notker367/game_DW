@@ -1,4 +1,4 @@
-import balance
+from Model import balance, roles
 
 
 class Text_for:
@@ -40,3 +40,5 @@ class Text_for:
                   'attack': 'Отличное время для атаки. Хотите её начать?',
                   'skeletons_win': 'Скелеты победили',
                   'skeletons_lose': 'ti loh'}
+    callback = {'create': 'Cоздан пользователь с id '}
+

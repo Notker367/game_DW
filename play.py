@@ -1,5 +1,4 @@
-import logic
-import balance
+from Model import logic, balance
 
 user = logic.create_user()
 
