@@ -1,7 +1,6 @@
 import config
 import telebot
-from Model import logic, admin_commands
-from View import keyboards, Texts
+from Model import logic
 
 bot = telebot.TeleBot(config.key)
 
@@ -37,9 +36,6 @@ def request(message):
     user = why_me(message)
     options = logic.active_buttons(user)
     text = message.text
-    # ['info', 'manual', 'skel_create', 'skel_work']
-    # if text not in options:
-    #    logic.not_have_commands(user)
     if 'manual' in options:
         logic.manual_callback(user, text)
     if 'skel_create' in options:
@@ -49,7 +45,6 @@ def request(message):
 
 
 def start_event(user):
-    # time.sleep(balance.time_for_waite_event())
     text, keyboard = logic.why_event(user)
     bot.send_message(user.chat_id, text, reply_markup=keyboard)
 

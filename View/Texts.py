@@ -1,4 +1,4 @@
-from Model import balance, Necromant_class
+from Model import balance, roles
 
 
 class Text_for:

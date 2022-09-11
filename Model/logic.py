@@ -1,4 +1,4 @@
-from Model import Necromant_class, balance
+from Model import roles, balance
 from View import keyboards, bot_send, callbacks
 from View.Texts import Text_for
 
@@ -9,17 +9,18 @@ need_event = False
 
 
 def create_user(chat_id='test'):
-    new_user = Necromant_class.Necromant(chat_id)
+    new_user = roles.Necromant(chat_id)
     user_list.update({chat_id: new_user})
     callbacks.create(new_user)
+    bot_send.message(new_user, Text_for.welcome)
     return new_user
 
 
-def get_active_keyboard(me: Necromant_class):
+def get_active_keyboard(me: roles.Necromant):
     return me.get_keyboard()
 
 
-def set_active_keyboard(me: Necromant_class, buttons):
+def set_active_keyboard(me: roles.Necromant, buttons):
     me.set_keyboard(buttons)
 
 
