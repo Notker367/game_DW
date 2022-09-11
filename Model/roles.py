@@ -9,7 +9,8 @@ class User:
 
 class Necromant:
 
-    def __init__(self):
+    def __init__(self, chat_id = 0):
+        self.chat_id = chat_id
         self.energy = 0
         self.bones = 0
         self.gold = 0
