@@ -12,6 +12,18 @@ def why_me(message):
     return user[1]
 
 
+@bot.message_handler(commands=["register"])
+def register(message):
+    chat = message.chat
+
+    chat_id = chat.id
+    name = chat.first_name + ' ' + chat.last_name
+    username = chat.username
+    create_time = message.date
+
+    logic.add_new_user(chat_id, name, username, create_time)
+
+
 @bot.message_handler(commands=["start"])
 def start(message):
     logic.create_user(message.chat.id)

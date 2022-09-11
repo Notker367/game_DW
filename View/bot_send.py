@@ -5,7 +5,7 @@ import telebot
 bot = telebot.TeleBot(config.key)
 
 
-def message(user, text):
+def message(user, text: str):
     bot.send_message(user.chat_id, text)
 
 

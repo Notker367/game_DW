@@ -1,7 +1,15 @@
+class User:
+
+    def __init__(self, chat_id, name='null', username='null', create_time=0):
+        self.chat_id = chat_id
+        self.name = name
+        self.username = username
+        self.create_time = create_time
+
+
 class Necromant:
 
-    def __init__(self, chat_id):
-        self.chat_id = chat_id
+    def __init__(self):
         self.energy = 0
         self.bones = 0
         self.gold = 0

@@ -1,6 +1,7 @@
 from Model import roles, balance
 from View import keyboards, bot_send, callbacks
 from View.Texts import Text_for
+import db
 
 user_list = {}
 request_text = {}
@@ -14,6 +15,12 @@ def create_user(chat_id='test'):
     callbacks.create(new_user)
     bot_send.message(new_user, Text_for.welcome)
     return new_user
+
+
+def add_new_user(chat_id, name, username, create_time):
+    new_user = roles.User(chat_id, name, username, create_time)
+    db.add_user(new_user)
+    bot_send.message(new_user, 'Привет ' + db.get_user(new_user.chat_id).name)
 
 
 def get_active_keyboard(me: roles.Necromant):
