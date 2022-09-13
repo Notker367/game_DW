@@ -17,7 +17,9 @@ def register(message):
     chat = message.chat
 
     chat_id = chat.id
-    name = chat.first_name + ' ' + chat.last_name
+    name = chat.first_name
+    if chat.last_name:
+        name += " " + chat.last_name
     username = chat.username
     create_time = message.date
 
@@ -40,7 +42,7 @@ def admin(message):
 def info(message):
     user = why_me(message)
     logic.time_step(user, message.date)
-    logic.user_info(user)
+    logic.user_info_db(user.chat_id)
 
 
 @bot.message_handler(content_types=['text'])

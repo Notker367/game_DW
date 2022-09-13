@@ -20,6 +20,7 @@ def create_user(chat_id='test'):
 def add_new_user(chat_id, name, username, create_time):
     new_user = roles.User(chat_id, name, username, create_time)
     db.add_user(new_user)
+    db.set_necromant(new_user.chat_id, roles.Necromant())
     bot_send.message(new_user, 'Привет ' + db.get_user(new_user.chat_id).name)
 
 
@@ -279,3 +280,8 @@ def admin_command(user, text):
                 bot_send.message(user, 'huity napisal')
         else:
             bot_send.message(user, 'Не верное количество аргументов')
+
+
+def user_info_db(chat_id):
+    user = db.get_user(chat_id)
+    bot_send.message(user, str(user.to_dict()))

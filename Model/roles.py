@@ -6,11 +6,29 @@ class User:
         self.username = username
         self.create_time = create_time
 
+    @staticmethod
+    def from_dict(user_info):
+        user = User(user_info.get('chat_id'),
+                    user_info.get('name'),
+                    user_info.get('username'),
+                    user_info.get('create_time')
+                    )
+        return user
 
-class Necromant:
+    def to_dict(self):
+        user = {
+            'chat_id': self.chat_id,
+            'name': self.name,
+            'username': self.username,
+            'create_time': self.create_time,
+        }
+        return user
 
-    def __init__(self, chat_id = 0):
-        self.chat_id = chat_id
+
+class Necromant(User):
+
+    def __init__(self, chat_id=0):
+        self.chat_id = super().chat_id
         self.energy = 0
         self.bones = 0
         self.gold = 0
@@ -21,6 +39,25 @@ class Necromant:
                           'defer': 0,
                           'attacker': 0}
         self.cd_event = 0
+
+    @staticmethod
+    def from_dict(necr_info):
+        necromant = Necromant(
+
+        )
+
+
+    def to_dict(self):
+        necromant = {
+            'energy': self.energy,
+            'bones': self.bones,
+            'gold': self.gold,
+            'level': self.level,
+            'keyboard': self.keyboard,
+            'skeletons': self.skeletons,
+            'cd_event': self.cd_event
+        }
+        return necromant
 
     def add_energy(self, change=1):
         self.energy += change

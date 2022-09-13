@@ -40,28 +40,21 @@ for doc in docs:
 
 def add_user(user: roles.User):
     doc = c_users.document(str(user.chat_id))
-    doc.set({
-        'chat_id': user.chat_id,
-        'name': user.name,
-        'username': user.username,
-        'create_time': user.create_time
-    })
+    doc.set(user.to_dict())
 
 
 def get_user(chat_id):
     doc = c_users.document(str(chat_id)).get()
-    if not doc.exists():
+    if not doc.exists:
         return False
     user_info = doc.to_dict()
-    user = roles.User(user_info.get('chat_id'),
-                      user_info.get('name'),
-                      user_info.get('username'),
-                      user_info.get('create_time'),
-                      )
+    user = roles.User.from_dict(user_info)
     return user
 
 
-def set_necromant(chat_id: str, necr: roles.Necromant):
+def set_necromant(chat_id, necr: roles.Necromant):
+    if type(chat_id) is int:
+        chat_id = str(chat_id)
     doc = c_world(chat_id).document('Necromant')
     doc.set({
         'energy': necr.energy,
