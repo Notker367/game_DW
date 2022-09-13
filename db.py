@@ -19,36 +19,36 @@ def c_world(user_id):
     return c_users.document(user_id).collection('world')
 
 
+def check_chat_id(chat_id):
+    if type(chat_id) is int:
+        chat_id = str(chat_id)
+    return chat_id
+
+
 def add_user(user: roles.User):
-    doc = c_users.document(str(user.chat_id))
+    chat_id = check_chat_id(user.chat_id)
+    doc = c_users.document(chat_id)
     doc.set(user.to_dict())
 
 
 def get_user(chat_id):
-    doc = c_users.document(str(chat_id)).get()
-    if not doc.exists:
-        return False
+    chat_id = check_chat_id(chat_id)
+    doc = c_users.document(chat_id).get()
     user_info = doc.to_dict()
     user = roles.User.from_dict(user_info)
     return user
 
 
 def set_necromant(user: roles.User, necr: roles.Necromant):
-    chat_id = user.chat_id
-    if type(chat_id) is int:
-        chat_id = str(chat_id)
+    chat_id = check_chat_id(user.chat_id)
     doc = c_world(chat_id).document('Necromant')
     doc.set(necr.to_dict())
 
 
 def get_necromant(user: roles.User):
-    chat_id = user.chat_id
-    if type(chat_id) is int:
-        chat_id = str(chat_id)
+    chat_id = check_chat_id(user.chat_id)
     doc = c_world(chat_id).document('Necromant')
-    doc.get()
-    if not doc.exists:
-        return False
+    doc = doc.get()
     necr_info = doc.to_dict()
     necr = roles.Necromant.from_dict(necr_info)
     return necr

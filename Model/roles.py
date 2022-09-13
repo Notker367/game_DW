@@ -103,10 +103,10 @@ class User:
 
     @staticmethod
     def from_dict(user_info):
-        user = User(user_info.get('chat_id'),
-                    user_info.get('name'),
-                    user_info.get('username'),
-                    user_info.get('create_time')
+        user = User(chat_id=user_info.get('chat_id'),
+                    name=user_info.get('name'),
+                    username=user_info.get('username'),
+                    create_time=user_info.get('create_time')
                     )
         return user
 

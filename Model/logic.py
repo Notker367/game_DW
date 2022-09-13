@@ -18,10 +18,14 @@ def create_user(chat_id='test'):
 
 
 def add_new_user(chat_id, name, username, create_time):
-    new_user = roles.User(chat_id, name, username, create_time)
+    new_user = roles.User(chat_id=chat_id,
+                          name=name,
+                          username=username,
+                          create_time=create_time,
+                          necromant=roles.Necromant())
     db.add_user(new_user)
-    db.set_necromant(new_user.chat_id, roles.Necromant())
-    bot_send.message(new_user, 'Привет ' + db.get_user(new_user.chat_id).name)
+    db.set_necromant(new_user, roles.Necromant())
+    bot_send.message(new_user, callbacks.text_created(new_user))
 
 
 def get_active_keyboard(me: roles.Necromant):

@@ -10,3 +10,5 @@ def create(user):
     bot_send.update_keyboard(user, text['create'] + str(user.chat_id), keyboard)
 
 
+def text_created(user):
+    return f'Привет {user.name}'
