@@ -12,6 +12,20 @@ def why_me(message):
     return user[1]
 
 
+@bot.message_handler(commands=["register"])
+def register(message):
+    chat = message.chat
+
+    chat_id = chat.id
+    name = chat.first_name
+    if chat.last_name:
+        name += " " + chat.last_name
+    username = chat.username
+    create_time = message.date
+
+    logic.add_new_user(chat_id, name, username, create_time)
+
+
 @bot.message_handler(commands=["start"])
 def start(message):
     logic.create_user(message.chat.id)
@@ -28,7 +42,7 @@ def admin(message):
 def info(message):
     user = why_me(message)
     logic.time_step(user, message.date)
-    logic.user_info(user)
+    logic.user_info_db(user.chat_id)
 
 
 @bot.message_handler(content_types=['text'])

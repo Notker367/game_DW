@@ -1,7 +1,7 @@
 import random
 
 # bones
-bones_for_kill_human = 20
+bones_for_kill_human = 5
 bones_for_kill_skeleton = 5
 bones_for_kill_rouge = 10
 bones_for_kill_guard = 20
