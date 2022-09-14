@@ -92,6 +92,10 @@ class Necromant:
                f'\nskeletons = {self.skeletons}\n'
 
 
+class Story:
+    pass
+
+
 class User:
 
     def __init__(self, chat_id, necromant: Necromant = None, name='null', username='null', create_time=0):

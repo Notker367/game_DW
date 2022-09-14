@@ -22,34 +22,31 @@ def add_new_user(chat_id, name, username, create_time):
                           name=name,
                           username=username,
                           create_time=create_time,
-                          necromant=roles.Necromant())
+                          necromant=roles.Necromant()
+                          )
     db.add_user(new_user)
     db.set_necromant(new_user, roles.Necromant())
+    keyboard = keyboards.main()
+    set_active_keyboard(new_user.necromant, 'main')
     bot_send.message(new_user, callbacks.text_created(new_user))
+    bot_send.update_keyboard(new_user, Text_for.keyboards['main'], keyboard)
 
 
 def get_active_keyboard(me: roles.Necromant):
     return me.get_keyboard()
 
 
-def set_active_keyboard(me: roles.Necromant, buttons):
-    me.set_keyboard(buttons)
+def set_active_keyboard(necr: roles.Necromant, buttons):
+    necr.set_keyboard(buttons)
+    db.set_necromant(necr)
 
 
 def get_user(chat_id):
-    users = user_list.keys()
-    if chat_id in users:
-        return True, user_list[chat_id]
+    user = db.get_user(chat_id)
+    if user:
+        return user
     else:
-        return False, create_user(str(chat_id))
-
-
-def need_send_user(me, texts='need_send_user пустой текст', read=0):
-    user_id = me.chat_id
-    if read and user_id in request_text.keys():
-        return request_text[user_id]
-    request_text[user_id] = texts
-    return texts
+        bot_send.message(user, 'Error user')
 
 
 def kill_human(me):
@@ -155,13 +152,14 @@ def check_event(me, time):
         need_event = False
 
 
-def step_energy(me, time):
+def step_energy(user, time):
+    necr = db.get_necromant(user)
     need_add_energy = time // balance.time_for_add_energy
-    energy_after = me.energy + need_add_energy
+    energy_after = user.necromant.energy + need_add_energy
     if energy_after > balance.max_energy:
-        me.energy = balance.max_energy
+        necr.energy = balance.max_energy
     elif energy_after <= balance.max_energy:
-        me.add_energy(need_add_energy)
+        necr.add_energy(need_add_energy)
     else:
         print('Error logic step_energy')
 
@@ -197,7 +195,8 @@ def bones_check(me, need_bones):
 
 
 def active_buttons(user):
-    return user.get_keyboard()
+    necr = db.get_necromant(user)
+    return necr.get_keyboard()
 
 
 def not_have_commands(user):
@@ -289,3 +288,13 @@ def admin_command(user, text):
 def user_info_db(chat_id):
     user = db.get_user(chat_id)
     bot_send.message(user, str(user.to_dict()))
+
+
+def main_key(user, text):
+    necr = db.get_necromant(user)
+    if text == Text_for.button['necr_info']:
+        bot_send.message(user, callbacks.info_necr(necr))
+    elif text == Text_for.button['work']:
+        pass
+    elif text == Text_for.button['necromancy']:
+        pass

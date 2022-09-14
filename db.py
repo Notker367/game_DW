@@ -49,6 +49,8 @@ def get_necromant(user: roles.User):
     chat_id = check_chat_id(user.chat_id)
     doc = c_world(chat_id).document('Necromant')
     doc = doc.get()
+    if not doc.exists:
+        return False
     necr_info = doc.to_dict()
     necr = roles.Necromant.from_dict(necr_info)
     return necr

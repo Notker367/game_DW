@@ -4,7 +4,7 @@ text = Texts.Text_for.callback
 
 
 def create(user):
-    options = ['info', 'manual', 'skel_create', 'skel_work']
+    options = ['main']
     user.set_keyboard(options)
     keyboard = keyboards.keyboard_create(options)
     bot_send.update_keyboard(user, text['create'] + str(user.chat_id), keyboard)
@@ -12,3 +12,10 @@ def create(user):
 
 def text_created(user):
     return f'Привет {user.name}'
+
+
+def info_necr(necr):
+    return f'Запас дней: {necr.energy}\n' \
+           f'Золото: {necr.gold}\n' \
+           f'Кости: {necr.bones}\n' \
+           f'Прочитанные страницы: {necr.level}'

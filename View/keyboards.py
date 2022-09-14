@@ -7,10 +7,10 @@ text_button = Texts.Text_for.button
 text_event = Texts.Text_for.event_button
 
 
-def keyboard_create(buttons):
+def keyboard_create(buttons=[]):
     keyboard = bot.types.ReplyKeyboardMarkup(resize_keyboard=True)
-    if 'info' in buttons:
-        keyboard = add_info(keyboard)
+    if 'info_user' in buttons:
+        keyboard = add_info_user(keyboard)
     if 'manual' in buttons:
         keyboard = add_manual(keyboard)
     if 'skel_create' in buttons:
@@ -20,8 +20,8 @@ def keyboard_create(buttons):
     return keyboard
 
 
-def add_info(keyboard):
-    info_but = k_button('/info')
+def add_info_user(keyboard):
+    info_but = k_button('/info_user')
     keyboard.add(info_but)
     return keyboard
 
@@ -85,4 +85,13 @@ def event_attack(keyboard):
     start_attack_but = bot.types.InlineKeyboardButton(text=text_event['start_attack'], callback_data='start_attack')
     cancel_attack_but = bot.types.InlineKeyboardButton(text=text_event['cancel_attack'], callback_data='cancel_attack')
     keyboard.add(start_attack_but, cancel_attack_but)
+    return keyboard
+
+
+def main():
+    keyboard = keyboard_create()
+    info_necr_but = k_button(text_button['necr_info'])
+    work_but = k_button(text_button['work'])
+    necromancy_but = k_button(text_button['necromancy'])
+    keyboard.add(info_necr_but, work_but, necromancy_but, row_width=1)
     return keyboard

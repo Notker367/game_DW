@@ -7,13 +7,11 @@ bot = telebot.TeleBot(config.key)
 
 def why_me(message):
     user = logic.get_user(message.chat.id)
-    if not user[0]:
-        bot.send_message(message.chat.id, 'Error user')
-    return user[1]
+    return user
 
 
-@bot.message_handler(commands=["register"])
-def register(message):
+@bot.message_handler(commands=["start"])
+def start(message):
     chat = message.chat
 
     chat_id = chat.id
@@ -26,10 +24,12 @@ def register(message):
     logic.add_new_user(chat_id, name, username, create_time)
 
 
+'''
 @bot.message_handler(commands=["start"])
 def start(message):
     logic.create_user(message.chat.id)
     user = why_me(message)
+'''
 
 
 @bot.message_handler(commands=["admin"])
@@ -38,10 +38,10 @@ def admin(message):
     logic.admin_command(user, message.text)
 
 
-@bot.message_handler(commands=["info"])
-def info(message):
+@bot.message_handler(commands=["info_user"])
+def info_user(message):
     user = why_me(message)
-    logic.time_step(user, message.date)
+    # logic.time_step(user, message.date)
     logic.user_info_db(user.chat_id)
 
 
@@ -56,6 +56,8 @@ def request(message):
         logic.skel_create_callback(user, text)
     if 'skel_work' in options:
         logic.skel_work_callback(user, text)
+    if 'main' in options:
+        logic.main_key(user, text)
 
 
 def start_event(user):
