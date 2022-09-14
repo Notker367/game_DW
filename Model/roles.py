@@ -87,6 +87,8 @@ class Necromant:
         self.level = lvl
 
     def get_keyboard(self):
+        if self.keyboard == [] or None:
+            return False
         return self.keyboard
 
     def set_keyboard(self, buttons: list):

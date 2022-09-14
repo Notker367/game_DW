@@ -370,6 +370,8 @@ def main_key(user, text):
         keyboard = keyboards.keyboard_create(options)
         bot_send.update_keyboard(user, callbacks.necromancy_text(necr), keyboard)
         set_active_keyboard(user, options)
+    else:
+        undefait_text(user)
 
 
 def work_key(user):
@@ -377,7 +379,12 @@ def work_key(user):
 
 
 def undefait_text(user):
-    keyboard = keyboards.keyboard_create(['start'])
+    necr = get_necr_from_stack(user.chat_id)
+    actual_keyboard = necr.get_keyboard()
+    if actual_keyboard:
+        keyboard = keyboards.keyboard_create(actual_keyboard)
+    else:
+        keyboard = keyboards.keyboard_create(['start'])
     bot_send.update_keyboard(user, Text_for.Error['undefait'], keyboard)
 
 

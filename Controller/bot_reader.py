@@ -40,7 +40,7 @@ def request(message):
     user = why_me(message)
     options = logic.get_active_keyboard(user)
     text = message.text
-    if set(options).issubset(logic.main_options):
+    if set(options).issubset(logic.main_options): #  всегда
         logic.main_key(user, text)
         return
     if logic.necromancy_options in options:
