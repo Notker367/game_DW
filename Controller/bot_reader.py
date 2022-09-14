@@ -6,22 +6,22 @@ bot = telebot.TeleBot(config.key)
 
 
 def why_me(message):
+    print(f'Проверка пользователя{message.chat.id}')
     user = logic.get_user(message.chat.id)
+    if not user:
+        print(f'Ошибка авторизации пользователя {message.chat.id}')
     return user
 
 
 @bot.message_handler(commands=["start"])
 def start(message):
-    chat = message.chat
+    user = why_me(message)
+    if not user:
+        logic.registration(message)
+    else:
+        logic.welcome(user)
 
-    chat_id = chat.id
-    name = chat.first_name
-    if chat.last_name:
-        name += " " + chat.last_name
-    username = chat.username
-    create_time = message.date
 
-    logic.add_new_user(chat_id, name, username, create_time)
 
 
 '''
@@ -58,6 +58,8 @@ def request(message):
         logic.skel_work_callback(user, text)
     if 'main' in options:
         logic.main_key(user, text)
+    else:
+        logic.undefait_text(user)
 
 
 def start_event(user):

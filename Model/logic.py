@@ -4,17 +4,40 @@ from View.Texts import Text_for
 import db
 
 user_list = {}
+'''
+{'<chat_id>:   {'user': User,
+                'necr': Necromant,
+                'story': Story
+                }
+}
+'''
 request_text = {}
 users_time = {}
 need_event = False
 
 
-def create_user(chat_id='test'):
-    new_user = roles.Necromant(chat_id)
+def add_user_stack(user: roles.User, necr: roles.Necromant):
+    chat_id = user.chat_id
+
+    new_user = {'user': user,
+                'necr': necr,
+                'story': None}
     user_list.update({chat_id: new_user})
-    callbacks.create(new_user)
-    bot_send.message(new_user, Text_for.welcome)
-    return new_user
+    print(f'Добавлен пользователь в стак - {new_user}')
+
+
+def registration(message):
+    chat = message.chat
+
+    chat_id = chat.id
+    name = chat.first_name
+
+    if chat.last_name:
+        name += " " + chat.last_name
+    username = chat.username
+    create_time = message.date
+
+    add_new_user(chat_id, name, username, create_time)
 
 
 def add_new_user(chat_id, name, username, create_time):
@@ -26,10 +49,16 @@ def add_new_user(chat_id, name, username, create_time):
                           )
     db.add_user(new_user)
     db.set_necromant(new_user, roles.Necromant())
-    keyboard = keyboards.main()
-    set_active_keyboard(new_user.necromant, 'main')
-    bot_send.message(new_user, callbacks.text_created(new_user))
+    options = ['info_necr', 'work', 'necromancy']
+    keyboard = keyboards.keyboard_create(options)
+    set_active_keyboard(new_user.necromant, options)
+    bot_send.message(new_user, callbacks.text_welcome(new_user))
     bot_send.update_keyboard(new_user, Text_for.keyboards['main'], keyboard)
+
+
+def welcome(user):
+    keyboard = keyboards.keyboard_create(['info_necr', 'work', 'necromancy'])
+    bot_send.update_keyboard(user, Text_for.welcome, keyboard)
 
 
 def get_active_keyboard(me: roles.Necromant):
@@ -42,11 +71,17 @@ def set_active_keyboard(necr: roles.Necromant, buttons):
 
 
 def get_user(chat_id):
+    if chat_id in user_list:
+        user = user_list.get(try_type(chat_id))
+        return user
     user = db.get_user(chat_id)
+    necr = db.get_necromant(user)
     if user:
+        add_user_stack(user, necr)
         return user
     else:
         bot_send.message(user, 'Error user')
+        return False
 
 
 def kill_human(me):
@@ -298,3 +333,14 @@ def main_key(user, text):
         pass
     elif text == Text_for.button['necromancy']:
         pass
+
+
+def undefait_text(user):
+    keyboard = keyboards.keyboard_create(['start'])
+    bot_send.update_keyboard(user, Text_for.Error['undefait'], keyboard)
+
+
+def try_type(chat_id):
+    if chat_id is not str:
+        chat_id = str(chat_id)
+    return chat_id

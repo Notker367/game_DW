@@ -11,12 +11,26 @@ def keyboard_create(buttons=[]):
     keyboard = bot.types.ReplyKeyboardMarkup(resize_keyboard=True)
     if 'info_user' in buttons:
         keyboard = add_info_user(keyboard)
+    if 'info_necr' in buttons:
+        keyboard = add_info_necr(keyboard)
+    if 'work' in buttons:
+        keyboard = add_work(keyboard)
+    if 'necromancy' in buttons:
+        keyboard = add_necromancy(keyboard)
     if 'manual' in buttons:
         keyboard = add_manual(keyboard)
     if 'skel_create' in buttons:
         keyboard = add_skeleton_create(keyboard)
     if 'skel_work' in buttons:
         keyboard = add_skeleton_work(keyboard)
+    if 'start' in buttons:
+        keyboard = add_start(keyboard)
+    return keyboard
+
+
+def add_start(keyboard):
+    start_but = k_button('/start')
+    keyboard.add(start_but)
     return keyboard
 
 
@@ -94,4 +108,22 @@ def main():
     work_but = k_button(text_button['work'])
     necromancy_but = k_button(text_button['necromancy'])
     keyboard.add(info_necr_but, work_but, necromancy_but, row_width=1)
+    return keyboard
+
+
+def add_info_necr(keyboard):
+    info_necr_but = k_button(text_button['necr_info'])
+    keyboard.add(info_necr_but)
+    return keyboard
+
+
+def add_work(keyboard):
+    work_but = k_button(text_button['work'])
+    keyboard.add(work_but)
+    return keyboard
+
+
+def add_necromancy(keyboard):
+    necromancy_but = k_button(text_button['necromancy'])
+    keyboard.add(necromancy_but)
     return keyboard
