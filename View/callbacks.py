@@ -29,3 +29,7 @@ def info_necr(necr: roles.Necromant):
 
 def necromancy_text(necr: roles.Necromant):
     return f'Ур. Некромантии: {necr.level}'
+
+
+def registration(user):
+    return f'{user.username}, вы зарегистрированы'

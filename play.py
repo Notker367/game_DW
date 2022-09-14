@@ -1,7 +1,5 @@
-import db
+l1 = [ 'c', 'b']
+l2 = ['a', 'b', 'c', 'd']
 
-user = db.get_user(727922443)
-
-user.necromant = db.get_necromant(user)
-
-print(user.necromant.bones)
+print(set(l1).issubset(l2))
+print(set(l2).issubset(l1))

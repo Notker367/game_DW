@@ -1,4 +1,4 @@
-import balance
+from Model import balance
 
 
 class Necromant:

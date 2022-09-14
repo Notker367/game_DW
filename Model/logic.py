@@ -15,20 +15,21 @@ request_text = {}
 users_time = {}
 need_event = False
 
-main_options = ['necr_info', 'work', 'necromancy']
+main_options = ['info_necr', 'work', 'necromancy']
 necromancy_options = ['skills', 'bones_to_skeleton', 'skel_work']
 skel_work_options = ['to_farmer', 'to_defer', 'to_attacker', 'to_reset']
 work_options = ['kill_hum', 'work']
 
 
 def add_user_stack(user: roles.User, necr: roles.Necromant):
-    chat_id = user.chat_id
+    chat_id = try_type(user.chat_id)
 
     new_user = {'user': user,
                 'necr': necr,
                 'story': None}
     user_list.update({chat_id: new_user})
     print(f'Добавлен пользователь в стак - {new_user}')
+    welcome(user)
 
 
 def get_user_from_stack(chat_id):
@@ -50,6 +51,7 @@ def get_story_from_stack(chat_id):
 
 
 def registration(message):
+    print(f'registration user {message.chat.id}')
     chat = message.chat
 
     chat_id = chat.id
@@ -72,15 +74,17 @@ def add_new_user(chat_id, name, username, create_time):
                           )
     db.set_user(new_user)
     db.set_necromant(new_user, roles.Necromant())
-    options = ['info_necr', 'work', 'necromancy']
-    keyboard = keyboards.keyboard_create(options)
-    set_active_keyboard(new_user, options)
-    bot_send.message(new_user, callbacks.text_welcome(new_user))
-    bot_send.update_keyboard(new_user, Text_for.keyboards['main'], keyboard)
+    # options = ['info_necr', 'work', 'necromancy']
+    # keyboard = keyboards.keyboard_create(options)
+    # set_active_keyboard(new_user, options)
+    bot_send.message(new_user, callbacks.registration(new_user))
+    undefait_text(new_user)
+    # bot_send.update_keyboard(new_user, Text_for.keyboards['main'], keyboard)
 
 
 def welcome(user):
-    keyboard = keyboards.keyboard_create(['info_necr', 'work', 'necromancy'])
+    keyboard = keyboards.keyboard_create(main_options)
+    set_active_keyboard(user, main_options)
     bot_send.update_keyboard(user, callbacks.text_welcome(user), keyboard)
 
 
@@ -96,19 +100,18 @@ def set_active_keyboard(user: roles.User, options):
 
 
 def get_user(chat_id):
+    chat_id = try_type(chat_id)
     if chat_id in user_list:
-        user = user_list.get(try_type(chat_id))
+        user_from_stack = get_user_from_stack(chat_id)
         print(f'User {chat_id} on stack')
-        return user
-    user, necr = db.load(chat_id)
-    if user:
+        return user_from_stack
+    user_from_bd, necr_from_bd = db.load(chat_id)
+    if user_from_bd:
         print(f'User {chat_id} on DB')
-        add_user_stack(user, necr)
+        add_user_stack(user_from_bd, necr_from_bd)
         print(f'Add user {chat_id} in stack')
-        return user
+        return user_from_bd
     else:
-        print(f'get_user {chat_id} error !!! Start registration')
-        bot_send.message(user, 'get_user else')
         return False
 
 

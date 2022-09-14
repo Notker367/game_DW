@@ -43,15 +43,15 @@ def add_info_user(keyboard):
 
 
 def add_skills(keyboard):
-    skill_but = k_button(text_button.get('skill'))
+    skill_but = k_button(text_button.get('skills'))
     keyboard.add(skill_but)
     return keyboard
 
 
 def add_manual(keyboard):
     kill_hum_but = k_button(text_button['kill_hum'])
-    work_but = k_button(text_button['work'])
-    keyboard.add(kill_hum_but, work_but, row_width=1)
+    heal_hum_but = k_button(text_button['heal_hum'])
+    keyboard.add(kill_hum_but, heal_hum_but, row_width=1)
     return keyboard
 
 

@@ -33,7 +33,10 @@ def set_user(user: roles.User):
 
 def get_user(chat_id):
     chat_id = check_chat_id(chat_id)
-    doc = c_users.document(chat_id).get()
+    doc = c_users.document(chat_id)
+    doc = doc.get()
+    if not doc.exists:
+        return False
     user_info = doc.to_dict()
     user = roles.User.from_dict(user_info)
     return user
@@ -63,5 +66,7 @@ def save(user: roles.User, necr: roles.Necromant):
 
 def load(chat_id):
     user = get_user(chat_id)
+    if not user:
+        return False, False
     necr = get_necromant(user)
     return user, necr

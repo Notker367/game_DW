@@ -6,10 +6,11 @@ bot = telebot.TeleBot(config.key)
 
 
 def why_me(message):
-    print(f'Проверка пользователя{message.chat.id}')
+    print(f'Проверка пользователя {message.chat.id}')
     user = logic.get_user(message.chat.id)
     if not user:
         print(f'Ошибка авторизации пользователя {message.chat.id}')
+        return False
     return user
 
 
@@ -20,14 +21,6 @@ def start(message):
         logic.registration(message)
     else:
         logic.welcome(user)
-
-
-'''
-@bot.message_handler(commands=["start"])
-def start(message):
-    logic.create_user(message.chat.id)
-    user = why_me(message)
-'''
 
 
 @bot.message_handler(commands=["admin"])
@@ -47,20 +40,15 @@ def request(message):
     user = why_me(message)
     options = logic.get_active_keyboard(user)
     text = message.text
-    if logic.main_options in options:
+    if set(options).issubset(logic.main_options):
         logic.main_key(user, text)
+        return
     if logic.necromancy_options in options:
-        pass
+        return
     if logic.skel_work_options in options:
-        pass
+        return
     if logic.work_options in options:
-        pass
-    if 'manual' in options:
-        logic.manual_callback(user, text)
-    if 'skel_create' in options:
-        logic.skel_create_callback(user, text)
-    if 'skel_work' in options:
-        logic.skel_work_callback(user, text)
+        return
     else:
         logic.undefait_text(user)
 
