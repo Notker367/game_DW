@@ -15,14 +15,17 @@ class Text_for:
             "...defer <count> \n" \
             "...attacker <count>\n"
 
-    button = {'kill_hum': 'Выкрасть пациента',
-              'work': 'Работать в госпитале',
+    button = {'kill_hum': 'Убить пациента',
+              'work': 'Вылечить пациента',
               'bones_to_skeleton': 'Создать прислужника',
-              'to_farmer': 'Искать кости',
-              'to_defer': 'Охрана дома',
-              'to_attacker': 'В наступление',
+              'to_farmer': 'Направить скелета собирать кости',
+              'to_defer': 'Направить скелета защищать дом',
+              'to_attacker': 'Направить скелета в атаку',
               'necr_info': 'info-инвентарь',
-              'necromancy': 'некромантия'}
+              'necromancy': 'некромантия',
+              'skills': 'Навыки',
+              'to_reset': 'Вернуть скелетов',
+              'skel_work': 'Направить скелетов'}
 
     Error = {'no_energy': 'Не хватает энергии',
              'no_bones': 'Не хватает костей',
@@ -52,4 +55,6 @@ class Text_for:
 
     callback = {'create': 'Cоздан пользователь с id '}
 
-    keyboards = {'main': 'вы у себя дома'}
+    keyboards = {'main': 'вы у себя дома',
+                 'work': 'Вы нашли пациента, которого уже не спасти, что с ним делать?',
+                 'necromancy': 'PIVO necromancy'}

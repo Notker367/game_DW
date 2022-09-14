@@ -1,8 +1,11 @@
+import balance
+
+
 class Necromant:
 
     def __init__(self, energy=0, bones=0, gold=0, level=0,
                  keyboard=None, skeletons=None,
-                 cd_event=0):
+                 cd_event=0, lvl_basement=0, lvl_chest=0):
         self.energy = energy
         self.bones = bones
         self.gold = gold
@@ -17,6 +20,8 @@ class Necromant:
                               'defer': 0,
                               'attacker': 0}
         self.cd_event = cd_event
+        self.lvl_basement = lvl_basement
+        self.lvl_chest = lvl_chest
 
     @staticmethod
     def from_dict(necr_info):
@@ -27,7 +32,9 @@ class Necromant:
             level=necr_info.get('level'),
             keyboard=necr_info.get('keyboard'),
             skeletons=necr_info.get('skeletons'),
-            cd_event=necr_info.get('cd_event')
+            cd_event=necr_info.get('cd_event'),
+            lvl_basement=necr_info.get('lvl_basement'),
+            lvl_chest=necr_info.get('lvl_chest')
         )
         return necromant
 
@@ -39,7 +46,9 @@ class Necromant:
             'level': self.level,
             'keyboard': self.keyboard,
             'skeletons': self.skeletons,
-            'cd_event': self.cd_event
+            'cd_event': self.cd_event,
+            'lvl_basement': self.lvl_basement,
+            'lvl_chest': self.lvl_chest
         }
         return necromant
 
@@ -82,6 +91,14 @@ class Necromant:
 
     def set_keyboard(self, buttons: list):
         self.keyboard = buttons
+
+    def get_max_gold(self):
+        max_gold = balance.max_gold_start + self.lvl_chest * balance.max_gold_for_lvl_chest
+        return max_gold
+
+    def get_max_bones(self):
+        max_bones = balance.max_bones_start + self.lvl_basement * balance.max_gold_for_lvl_chest
+        return max_bones
 
     def info(self):
         return f'PIVO :\nenergy = {self.energy}, ' \

@@ -15,6 +15,11 @@ request_text = {}
 users_time = {}
 need_event = False
 
+main_options = ['necr_info', 'work', 'necromancy']
+necromancy_options = ['skills', 'bones_to_skeleton', 'skel_work']
+skel_work_options = ['to_farmer', 'to_defer', 'to_attacker', 'to_reset']
+work_options = ['kill_hum', 'work']
+
 
 def add_user_stack(user: roles.User, necr: roles.Necromant):
     chat_id = user.chat_id
@@ -24,6 +29,24 @@ def add_user_stack(user: roles.User, necr: roles.Necromant):
                 'story': None}
     user_list.update({chat_id: new_user})
     print(f'Добавлен пользователь в стак - {new_user}')
+
+
+def get_user_from_stack(chat_id):
+    chat_id = try_type(chat_id)
+    user = user_list.get(chat_id)['user']
+    return user
+
+
+def get_necr_from_stack(chat_id):
+    chat_id = try_type(chat_id)
+    necr = user_list.get(chat_id)['necr']
+    return necr
+
+
+def get_story_from_stack(chat_id):
+    chat_id = try_type(chat_id)
+    story = user_list.get(chat_id)['story']
+    return story
 
 
 def registration(message):
@@ -47,40 +70,45 @@ def add_new_user(chat_id, name, username, create_time):
                           create_time=create_time,
                           necromant=roles.Necromant()
                           )
-    db.add_user(new_user)
+    db.set_user(new_user)
     db.set_necromant(new_user, roles.Necromant())
     options = ['info_necr', 'work', 'necromancy']
     keyboard = keyboards.keyboard_create(options)
-    set_active_keyboard(new_user.necromant, options)
+    set_active_keyboard(new_user, options)
     bot_send.message(new_user, callbacks.text_welcome(new_user))
     bot_send.update_keyboard(new_user, Text_for.keyboards['main'], keyboard)
 
 
 def welcome(user):
     keyboard = keyboards.keyboard_create(['info_necr', 'work', 'necromancy'])
-    bot_send.update_keyboard(user, Text_for.welcome, keyboard)
+    bot_send.update_keyboard(user, callbacks.text_welcome(user), keyboard)
 
 
-def get_active_keyboard(me: roles.Necromant):
-    return me.get_keyboard()
+def get_active_keyboard(user: roles.User):
+    necr = get_necr_from_stack(user.chat_id)
+    options = necr.get_keyboard()
+    return options
 
 
-def set_active_keyboard(necr: roles.Necromant, buttons):
-    necr.set_keyboard(buttons)
-    db.set_necromant(necr)
+def set_active_keyboard(user: roles.User, options):
+    necr = get_necr_from_stack(user.chat_id)
+    necr.set_keyboard(options)
 
 
 def get_user(chat_id):
     if chat_id in user_list:
         user = user_list.get(try_type(chat_id))
+        print(f'User {chat_id} on stack')
         return user
-    user = db.get_user(chat_id)
-    necr = db.get_necromant(user)
+    user, necr = db.load(chat_id)
     if user:
+        print(f'User {chat_id} on DB')
         add_user_stack(user, necr)
+        print(f'Add user {chat_id} in stack')
         return user
     else:
-        bot_send.message(user, 'Error user')
+        print(f'get_user {chat_id} error !!! Start registration')
+        bot_send.message(user, 'get_user else')
         return False
 
 
@@ -326,13 +354,23 @@ def user_info_db(chat_id):
 
 
 def main_key(user, text):
-    necr = db.get_necromant(user)
+    necr = get_necr_from_stack(user.chat_id)
     if text == Text_for.button['necr_info']:
         bot_send.message(user, callbacks.info_necr(necr))
     elif text == Text_for.button['work']:
-        pass
+        options = ['manual']
+        keyboard = keyboards.keyboard_create(options)
+        bot_send.update_keyboard(user, Text_for.keyboards.get('work'), keyboard)
+        set_active_keyboard(user, options)
     elif text == Text_for.button['necromancy']:
-        pass
+        options = ['skills', 'skel_create', 'skel_work']
+        keyboard = keyboards.keyboard_create(options)
+        bot_send.update_keyboard(user, callbacks.necromancy_text(necr), keyboard)
+        set_active_keyboard(user, options)
+
+
+def work_key(user):
+    pass
 
 
 def undefait_text(user):

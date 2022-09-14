@@ -17,14 +17,16 @@ def keyboard_create(buttons=[]):
         keyboard = add_work(keyboard)
     if 'necromancy' in buttons:
         keyboard = add_necromancy(keyboard)
-    if 'manual' in buttons:
-        keyboard = add_manual(keyboard)
+    if 'skills' in buttons:
+        keyboard = add_skills(keyboard)
     if 'skel_create' in buttons:
         keyboard = add_skeleton_create(keyboard)
     if 'skel_work' in buttons:
         keyboard = add_skeleton_work(keyboard)
     if 'start' in buttons:
         keyboard = add_start(keyboard)
+    if 'manual' in buttons:
+        keyboard = add_manual(keyboard)
     return keyboard
 
 
@@ -40,10 +42,16 @@ def add_info_user(keyboard):
     return keyboard
 
 
+def add_skills(keyboard):
+    skill_but = k_button(text_button.get('skill'))
+    keyboard.add(skill_but)
+    return keyboard
+
+
 def add_manual(keyboard):
     kill_hum_but = k_button(text_button['kill_hum'])
     work_but = k_button(text_button['work'])
-    keyboard.add(kill_hum_but, work_but)
+    keyboard.add(kill_hum_but, work_but, row_width=1)
     return keyboard
 
 
@@ -54,10 +62,32 @@ def add_skeleton_create(keyboard):
 
 
 def add_skeleton_work(keyboard):
+    skel_work_but = k_button(text_button['skel_work'])
+    keyboard.add(skel_work_but)
+    return keyboard
+
+
+def add_skeleton_to_farmer(keyboard):
     to_farmer_but = k_button(text_button['to_farmer'])
+    keyboard.add(to_farmer_but)
+    return keyboard
+
+
+def add_skeleton_to_defer(keyboard):
     to_defer_but = k_button(text_button['to_defer'])
+    keyboard.add(to_defer_but)
+    return keyboard
+
+
+def add_skeleton_to_attacker(keyboard):
     to_attacker_but = k_button(text_button['to_attacker'])
-    keyboard.add(to_farmer_but, to_defer_but, to_attacker_but)
+    keyboard.add(to_attacker_but)
+    return keyboard
+
+
+def add_skeleton_to_reset(keyboard):
+    to_reset_but = k_button(text_button['to_reset'])
+    keyboard.add(to_reset_but)
     return keyboard
 
 

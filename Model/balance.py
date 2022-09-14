@@ -1,12 +1,16 @@
 import random
 
 # bones
+max_bones_start = 50
+max_bones_for_lvl_basement = 20
 bones_for_kill_human = 5
 bones_for_kill_skeleton = 5
 bones_for_kill_rouge = 10
 bones_for_kill_guard = 20
 
 # gold
+max_gold_start = 100
+max_gold_for_lvl_chest = 20
 gold_for_work = 20
 gold_for_rouge = 10
 gold_for_def_event = 10
@@ -30,7 +34,11 @@ win_skels_change_def = 60  # %
 win_skels_change_attack = 40  # %
 
 # level
+max_level_start = 5
 change_read_book = 20  # %
+
+# time
+time_for_clear_stack = 86400  # sec (1d)
 
 
 def roll(start: int = 0, end: int = 100) -> int:

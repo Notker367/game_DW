@@ -25,7 +25,7 @@ def check_chat_id(chat_id):
     return chat_id
 
 
-def add_user(user: roles.User):
+def set_user(user: roles.User):
     chat_id = check_chat_id(user.chat_id)
     doc = c_users.document(chat_id)
     doc.set(user.to_dict())
@@ -54,3 +54,14 @@ def get_necromant(user: roles.User):
     necr_info = doc.to_dict()
     necr = roles.Necromant.from_dict(necr_info)
     return necr
+
+
+def save(user: roles.User, necr: roles.Necromant):
+    set_user(user)
+    set_necromant(user, necr)
+
+
+def load(chat_id):
+    user = get_user(chat_id)
+    necr = get_necromant(user)
+    return user, necr

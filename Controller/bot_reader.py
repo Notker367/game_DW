@@ -22,8 +22,6 @@ def start(message):
         logic.welcome(user)
 
 
-
-
 '''
 @bot.message_handler(commands=["start"])
 def start(message):
@@ -41,23 +39,28 @@ def admin(message):
 @bot.message_handler(commands=["info_user"])
 def info_user(message):
     user = why_me(message)
-    # logic.time_step(user, message.date)
     logic.user_info_db(user.chat_id)
 
 
 @bot.message_handler(content_types=['text'])
 def request(message):
     user = why_me(message)
-    options = logic.active_buttons(user)
+    options = logic.get_active_keyboard(user)
     text = message.text
+    if logic.main_options in options:
+        logic.main_key(user, text)
+    if logic.necromancy_options in options:
+        pass
+    if logic.skel_work_options in options:
+        pass
+    if logic.work_options in options:
+        pass
     if 'manual' in options:
         logic.manual_callback(user, text)
     if 'skel_create' in options:
         logic.skel_create_callback(user, text)
     if 'skel_work' in options:
         logic.skel_work_callback(user, text)
-    if 'main' in options:
-        logic.main_key(user, text)
     else:
         logic.undefait_text(user)
 
