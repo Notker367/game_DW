@@ -36,7 +36,7 @@ class Text_for:
 
     complite = {'kill_hum': f'Вы нашли бедалагу которого никто не вспомнит '
                             f'\n +{balance.bones_for_kill_human} костей',
-                'work': f'Получено вознаграждение после тяжелого рабочего дня'
+                'heal_hum': f'Получено вознаграждение после тяжелого рабочего дня'
                         f'\n +{balance.gold_for_work} золотых',
                 'bones_to_skeleton': f'Еще один прислужник ждет приказа'
                                      f'\n -{balance.skeleton_need_bones} костей',

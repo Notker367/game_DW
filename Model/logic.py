@@ -16,9 +16,9 @@ users_time = {}
 need_event = False
 
 main_options = ['info_necr', 'work', 'necromancy']
+work_options = ['kill_hum', 'heal_hum']
 necromancy_options = ['skills', 'bones_to_skeleton', 'skel_work']
-skel_work_options = ['to_farmer', 'to_defer', 'to_attacker', 'to_reset']
-work_options = ['kill_hum', 'work']
+skel_work_options = ['to_farmer', 'to_defer', 'to_attacker', 'to_reset']d
 
 
 def add_user_stack(user: roles.User, necr: roles.Necromant):
@@ -74,12 +74,8 @@ def add_new_user(chat_id, name, username, create_time):
                           )
     db.set_user(new_user)
     db.set_necromant(new_user, roles.Necromant())
-    # options = ['info_necr', 'work', 'necromancy']
-    # keyboard = keyboards.keyboard_create(options)
-    # set_active_keyboard(new_user, options)
     bot_send.message(new_user, callbacks.registration(new_user))
     undefait_text(new_user)
-    # bot_send.update_keyboard(new_user, Text_for.keyboards['main'], keyboard)
 
 
 def welcome(user):
@@ -115,12 +111,12 @@ def get_user(chat_id):
         return False
 
 
-def kill_human(me):
-    me.take_energy()
-    me.add_bones(balance.bones_for_kill_human)
+def kill_human(necr: roles.Necromant):
+    necr.take_energy()
+    necr.add_bones(balance.bones_for_kill_human)
 
 
-def go_work(me):
+def heal_hum(me):
     me.take_energy()
     me.add_gold(balance.gold_for_work)
 
@@ -238,8 +234,8 @@ def user_info(user):
     bot_send.message(user, user.info())
 
 
-def energy_check(me, need_energy=1):
-    if me.energy >= need_energy:
+def energy_check(necr: roles.Necromant, need_energy=1):
+    if necr.energy >= need_energy:
         have_energy = True
     else:
         have_energy = False
@@ -267,20 +263,6 @@ def active_buttons(user):
 
 def not_have_commands(user):
     bot_send.message(user, Text_for.Error['no_commands'])
-
-
-def manual_callback(user, text):
-    need_kill_hum = text == Text_for.button['kill_hum']
-    need_work = text == Text_for.button['work']
-    energy = energy_check(user)
-    if need_kill_hum and energy:
-        kill_human(user)
-        bot_send.message(user, Text_for.complite['kill_hum'])
-    elif need_work and energy:
-        go_work(user)
-        bot_send.message(user, Text_for.complite['work'])
-    elif (need_work or need_kill_hum) and not energy:
-        bot_send.message(user, Text_for.Error['no_energy'])
 
 
 def skel_create_callback(user, text):
@@ -361,7 +343,7 @@ def main_key(user, text):
     if text == Text_for.button['necr_info']:
         bot_send.message(user, callbacks.info_necr(necr))
     elif text == Text_for.button['work']:
-        options = ['manual']
+        options = work_options
         keyboard = keyboards.keyboard_create(options)
         bot_send.update_keyboard(user, Text_for.keyboards.get('work'), keyboard)
         set_active_keyboard(user, options)
@@ -372,8 +354,25 @@ def main_key(user, text):
         set_active_keyboard(user, options)
 
 
-def work_key(user):
-    pass
+def work_key(user, text):
+    necr = get_necr_from_stack(user.chat_id)
+    have_energy = energy_check(necr)
+
+    need_kill_hum = text == Text_for.button['kill_hum']
+    need_heal_hum = text == Text_for.button['heal_hum']
+
+    if need_kill_hum and have_energy:
+        kill_human(necr)
+        bot_send.message(user, Text_for.complite['kill_hum'])
+    elif need_heal_hum and have_energy:
+        heal_hum(necr)
+        bot_send.message(user, Text_for.complite['heal_hum'])
+    elif (need_heal_hum or need_kill_hum) and not have_energy:
+        bot_send.message(user, Text_for.Error['no_energy'])
+    options = main_options
+    keyboard = keyboards.keyboard_create(options)
+    bot_send.update_keyboard(user, Text_for.keyboards.get('main'), keyboard)
+    set_active_keyboard(user, options)
 
 
 def undefait_text(user):

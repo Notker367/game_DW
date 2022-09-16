@@ -43,14 +43,17 @@ def request(message):
     if set(options).issubset(logic.main_options):
         logic.main_key(user, text)
         return
-    if logic.necromancy_options in options:
-        return
-    if logic.skel_work_options in options:
-        return
-    if logic.work_options in options:
+    if set(options).issubset(logic.work_options):
+        logic.work_key(user, text)
         return
     else:
         logic.undefait_text(user)
+    if logic.necromancy_options in options:
+        pass
+        return
+    if logic.skel_work_options in options:
+        pass
+        return
 
 
 def start_event(user):
