@@ -18,7 +18,7 @@ need_event = False
 main_options = ['info_necr', 'work', 'necromancy']
 work_options = ['kill_hum', 'heal_hum']
 necromancy_options = ['skills', 'bones_to_skeleton', 'skel_work']
-skel_work_options = ['to_farmer', 'to_defer', 'to_attacker', 'to_reset']d
+skel_work_options = ['to_farmer', 'to_defer', 'to_attacker', 'to_reset']
 
 
 def add_user_stack(user: roles.User, necr: roles.Necromant):
