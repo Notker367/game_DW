@@ -11,22 +11,39 @@ def keyboard_create(buttons=[]):
     keyboard = bot.types.ReplyKeyboardMarkup(resize_keyboard=True)
     if 'info_user' in buttons:
         keyboard = add_info_user(keyboard)
-    if 'info_necr' in buttons:
-        keyboard = add_info_necr(keyboard)
-    if 'work' in buttons:
-        keyboard = add_work(keyboard)
-    if 'necromancy' in buttons:
-        keyboard = add_necromancy(keyboard)
+    if 'start' in buttons:
+        keyboard = add_start(keyboard)
+    keyboard = mian_options_check(buttons, keyboard)
+    keyboard = necromancy_options_check(buttons, keyboard)
+    keyboard = work_options_check(buttons, keyboard)
+    return keyboard
+
+
+def work_options_check(buttons, keyboard):
+    if 'kill_hum' in buttons:
+        keyboard = add_kill_hum(keyboard)
+    if 'heal_hum' in buttons:
+        keyboard = add_heal_hum(keyboard)
+    return keyboard
+
+
+def necromancy_options_check(buttons, keyboard):
     if 'skills' in buttons:
         keyboard = add_skills(keyboard)
     if 'skel_create' in buttons:
         keyboard = add_skeleton_create(keyboard)
     if 'skel_work' in buttons:
         keyboard = add_skeleton_work(keyboard)
-    if 'start' in buttons:
-        keyboard = add_start(keyboard)
-    if 'manual' in buttons:
-        keyboard = add_manual(keyboard)
+    return keyboard
+
+
+def mian_options_check(buttons, keyboard):
+    if 'info_necr' in buttons:
+        keyboard = add_info_necr(keyboard)
+    if 'work' in buttons:
+        keyboard = add_work(keyboard)
+    if 'necromancy' in buttons:
+        keyboard = add_necromancy(keyboard)
     return keyboard
 
 
@@ -48,10 +65,15 @@ def add_skills(keyboard):
     return keyboard
 
 
-def add_manual(keyboard):
+def add_kill_hum(keyboard):
     kill_hum_but = k_button(text_button['kill_hum'])
+    keyboard.add(kill_hum_but)
+    return keyboard
+
+
+def add_heal_hum(keyboard):
     heal_hum_but = k_button(text_button['heal_hum'])
-    keyboard.add(kill_hum_but, heal_hum_but, row_width=1)
+    keyboard.add(heal_hum_but)
     return keyboard
 
 
