@@ -121,10 +121,10 @@ def heal_hum(me):
     me.add_gold(balance.gold_for_work)
 
 
-def create_skeleton(me):
+def create_skeleton(necr: roles.Necromant):
     # me.take_energy(1)
-    me.take_bones(balance.skeleton_need_bones)
-    me.set_skeletons('waiter', 1)
+    necr.take_bones(balance.skeleton_need_bones)
+    necr.set_skeletons('waiter', 1)
 
 
 def skeleton_go_to(me, work, count=1):
@@ -265,34 +265,6 @@ def not_have_commands(user):
     bot_send.message(user, Text_for.Error['no_commands'])
 
 
-def skel_create_callback(user, text):
-    need_skel_create = text == Text_for.button['bones_to_skeleton']
-    have_bones = bones_check(user, balance.skeleton_need_bones)
-    if need_skel_create and have_bones:
-        create_skeleton(user)
-        bot_send.message(user, Text_for.complite['bones_to_skeleton'])
-    elif need_skel_create and not have_bones:
-        bot_send.message(user, Text_for.Error['no_bones'])
-
-
-def skel_work_callback(user, text):
-    need_farmer = text == Text_for.button['to_farmer']
-    need_defer = text == Text_for.button['to_defer']
-    need_attacker = text == Text_for.button['to_attacker']
-    have_waiter = skeleton_waiter_check(user)
-    if need_farmer and have_waiter:
-        skeleton_go_to(user, 'farmer')
-        bot_send.message(user, Text_for.complite['to_farmer'])
-    elif need_defer and have_waiter:
-        skeleton_go_to(user, 'defer')
-        bot_send.message(user, Text_for.complite['to_defer'])
-    elif need_attacker and have_waiter:
-        skeleton_go_to(user, 'attacker')
-        bot_send.message(user, Text_for.complite['to_attacker'])
-    elif (need_farmer or need_defer or need_attacker) and not have_waiter:
-        bot_send.message(user, Text_for.Error['no_waiter'])
-
-
 def why_event(me):
     roll_event = balance.roll()
     attackers = me.skeletons['attacker']
@@ -366,15 +338,61 @@ def work_key(user, text):
     if need_kill_hum and have_energy:
         kill_human(necr)
         bot_send.message(user, Text_for.complite['kill_hum'])
+
     elif need_heal_hum and have_energy:
         heal_hum(necr)
         bot_send.message(user, Text_for.complite['heal_hum'])
+
     elif (need_heal_hum or need_kill_hum) and not have_energy:
         bot_send.message(user, Text_for.Error['no_energy'])
+
     options = main_options
     keyboard = keyboards.keyboard_create(options)
     bot_send.update_keyboard(user, Text_for.keyboards.get('main'), keyboard)
     set_active_keyboard(user, options)
+
+
+def necromancy_key(user, text):
+    skills = text == Text_for.button['skills']
+    skel_create = text == Text_for.button['bones_to_skeleton']
+    skel_management = text == Text_for.button['skel_work']
+
+    necr = get_necr_from_stack(user.chat_id)
+
+    have_bones_for_create = bones_check(necr, balance.skeleton_need_bones)
+
+    if skills:
+        bot_send.message(user, callbacks.skills(necr))
+
+    elif skel_create and have_bones_for_create:
+        create_skeleton(necr)
+        bot_send.message(user, Text_for.complite['bones_to_skeleton'])
+    elif skel_create and not have_bones_for_create:
+        bot_send.message(user, Text_for.Error['no_bones'])
+
+    elif skel_management:
+        options = skel_work_options
+        keyboard = keyboards.keyboard_create(options)
+        bot_send.update_keyboard(user, callbacks, keyboard)
+        set_active_keyboard(user, options)
+
+
+def skel_work_callback(user, text):
+    need_farmer = text == Text_for.button['to_farmer']
+    need_defer = text == Text_for.button['to_defer']
+    need_attacker = text == Text_for.button['to_attacker']
+    have_waiter = skeleton_waiter_check(user)
+    if need_farmer and have_waiter:
+        skeleton_go_to(user, 'farmer')
+        bot_send.message(user, Text_for.complite['to_farmer'])
+    elif need_defer and have_waiter:
+        skeleton_go_to(user, 'defer')
+        bot_send.message(user, Text_for.complite['to_defer'])
+    elif need_attacker and have_waiter:
+        skeleton_go_to(user, 'attacker')
+        bot_send.message(user, Text_for.complite['to_attacker'])
+    elif (need_farmer or need_defer or need_attacker) and not have_waiter:
+        bot_send.message(user, Text_for.Error['no_waiter'])
 
 
 def undefait_text(user):

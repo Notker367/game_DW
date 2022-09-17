@@ -40,20 +40,20 @@ def request(message):
     user = why_me(message)
     options = logic.get_active_keyboard(user)
     text = message.text
-    if set(options).issubset(logic.main_options): #  всегда
+    if set(options).issubset(logic.main_options):
         logic.main_key(user, text)
         return
     if set(options).issubset(logic.work_options):
         logic.work_key(user, text)
         return
-    else:
-        logic.undefait_text(user)
-    if logic.necromancy_options in options:
-        pass
+    if set(options).issubset(logic.necromancy_options):
+        logic.necromancy_key(user, text)
         return
     if logic.skel_work_options in options:
         pass
         return
+    else:
+        logic.undefait_text(user)
 
 
 def start_event(user):

@@ -58,4 +58,11 @@ class Text_for:
 
     keyboards = {'main': 'вы у себя дома',
                  'work': 'Вы нашли пациента, которого уже не спасти, что с ним делать?',
-                 'necromancy': 'PIVO necromancy'}
+                 'necromancy': 'PIVO necromancy',
+                 'skel_work_options': 'Решите как использовать ваших прислужников'}
+    skills = {'lvl0': 'вы еще не достойны пить pivo',
+              'lvl1': 'вы можете выпить 1 pivo',
+              'lvl2': 'вы можете выпить 2 pivo',
+              'lvl3': 'вы можете выпить 3 pivo',
+              'lvl4': 'вы можете выпить 4 pivo',
+              'lvl5': 'вы можете выпить 5 pivo'}

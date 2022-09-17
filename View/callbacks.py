@@ -33,3 +33,13 @@ def necromancy_text(necr: roles.Necromant):
 
 def registration(user):
     return f'{user.username}, вы зарегистрированы'
+
+
+def skills(necr: roles.Necromant):
+    text_for_necr_lvl = Texts.Text_for.skills[f'lvl{str(necr.level)}']
+    return text_for_necr_lvl
+
+
+def skeletons_management(necr):
+    text_skel_info = f'Всего скилеотов: {necr}'
+    pass
