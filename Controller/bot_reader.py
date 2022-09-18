@@ -14,6 +14,11 @@ def why_me(message):
     return user
 
 
+@bot.message_handler(commands=["kill_me"])
+def kill_me(message):
+    print(fast.end.program)
+
+
 @bot.message_handler(commands=["start"])
 def start(message):
     user = why_me(message)
@@ -48,9 +53,6 @@ def request(message):
         return
     if set(options).issubset(logic.necromancy_options):
         logic.necromancy_key(user, text)
-        return
-    if logic.skel_work_options in options:
-        pass
         return
     else:
         logic.undefait_text(user)

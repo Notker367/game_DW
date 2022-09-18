@@ -28,12 +28,18 @@ def work_options_check(buttons, keyboard):
 
 
 def necromancy_options_check(buttons, keyboard):
-    if 'skills' in buttons:
-        keyboard = add_skills(keyboard)
-    if 'skel_create' in buttons:
+    if 'bones_to_skeleton' in buttons:
         keyboard = add_skeleton_create(keyboard)
-    if 'skel_work' in buttons:
-        keyboard = add_skeleton_work(keyboard)
+    if 'to_farmer'in buttons:
+        keyboard = add_skeleton_to_farmer(keyboard)
+    if 'to_defer' in buttons:
+        keyboard = add_skeleton_to_defer(keyboard)
+    if 'to_attacker' in buttons:
+        keyboard = add_skeleton_to_attacker(keyboard)
+    if 'to_reset' in buttons:
+        keyboard = add_skeleton_to_reset(keyboard)
+    if 'back' in buttons:
+        keyboard = add_back(keyboard)
     return keyboard
 
 
@@ -44,6 +50,8 @@ def mian_options_check(buttons, keyboard):
         keyboard = add_work(keyboard)
     if 'necromancy' in buttons:
         keyboard = add_necromancy(keyboard)
+    if 'upgrade' in buttons:
+        keyboard = add_upgrade(keyboard)
     return keyboard
 
 
@@ -56,6 +64,18 @@ def add_start(keyboard):
 def add_info_user(keyboard):
     info_but = k_button('/info_user')
     keyboard.add(info_but)
+    return keyboard
+
+
+def add_upgrade(keyboard):
+    upgrade_but_text = text_button.get('upgrade')
+    keyboard.keyboard[2].append({'text': upgrade_but_text})
+    return keyboard
+
+
+def add_back(keyboard):
+    back_but = k_button(text_button.get('back'))
+    keyboard.add(back_but)
     return keyboard
 
 
@@ -90,20 +110,35 @@ def add_skeleton_work(keyboard):
 
 
 def add_skeleton_to_farmer(keyboard):
-    to_farmer_but = k_button(text_button['to_farmer'])
-    keyboard.add(to_farmer_but)
+    to_farmer_text = text_button['to_farmer']
+    to_farmer_but = k_button(to_farmer_text)
+
+    if len(keyboard.keyboard) >= 2:
+        keyboard.keyboard[1].append(to_farmer_text)
+    else:
+        keyboard.add(to_farmer_but)
     return keyboard
 
 
 def add_skeleton_to_defer(keyboard):
-    to_defer_but = k_button(text_button['to_defer'])
-    keyboard.add(to_defer_but)
+    to_defer_text = text_button['to_defer']
+    to_defer_but = k_button(to_defer_text)
+
+    if len(keyboard.keyboard) >= 2:
+        keyboard.keyboard[1].append(to_defer_text)
+    else:
+        keyboard.add(to_defer_but)
     return keyboard
 
 
 def add_skeleton_to_attacker(keyboard):
-    to_attacker_but = k_button(text_button['to_attacker'])
-    keyboard.add(to_attacker_but)
+    to_attacker_text = text_button['to_attacker']
+    to_attacker_but = k_button(to_attacker_text)
+
+    if len(keyboard.keyboard) >= 2:
+        keyboard.keyboard[1].append(to_attacker_text)
+    else:
+        keyboard.add(to_attacker_but)
     return keyboard
 
 

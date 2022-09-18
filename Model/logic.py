@@ -15,10 +15,17 @@ request_text = {}
 users_time = {}
 need_event = False
 
-main_options = ['info_necr', 'work', 'necromancy']
-work_options = ['kill_hum', 'heal_hum']
-necromancy_options = ['skills', 'bones_to_skeleton', 'skel_work']
-skel_work_options = ['to_farmer', 'to_defer', 'to_attacker', 'to_reset']
+main_options = ['info_necr',
+                'work',
+                'necromancy', 'upgrade']
+
+work_options = ['kill_hum',
+                'heal_hum']
+
+necromancy_options = ['bones_to_skeleton',
+                      'to_farmer', 'to_defer', 'to_attacker',
+                      'to_reset',
+                      'back']
 
 
 def add_user_stack(user: roles.User, necr: roles.Necromant):
@@ -127,12 +134,12 @@ def create_skeleton(necr: roles.Necromant):
     necr.set_skeletons('waiter', 1)
 
 
-def skeleton_go_to(me, work, count=1):
+def skeleton_go_to(necr: roles.Necromant, work, count=1):
     """Ввести из farmer defer attacker"""
-    if work not in me.skeletons:
+    if work not in necr.skeletons:
         print('Error skeleton_go_to type')
-    me.set_skeletons('waiter', count * -1)
-    me.set_skeletons(work, count)
+    necr.set_skeletons('waiter', count * -1)
+    necr.set_skeletons(work, count)
 
 
 def take_from_farm_bone(me, dif_time=1):
@@ -242,8 +249,8 @@ def energy_check(necr: roles.Necromant, need_energy=1):
     return have_energy
 
 
-def skeleton_waiter_check(me, need_waiter=1):
-    if me.skeletons['waiter'] >= need_waiter:
+def skeleton_waiter_check(necr: roles.Necromant, need_waiter=1):
+    if necr.skeletons['waiter'] >= need_waiter:
         return True
     else:
         return False
@@ -312,20 +319,35 @@ def user_info_db(chat_id):
 
 def main_key(user, text):
     necr = get_necr_from_stack(user.chat_id)
+
     if text == Text_for.button['necr_info']:
         bot_send.message(user, callbacks.info_necr(necr))
+
     elif text == Text_for.button['work']:
-        options = work_options
-        keyboard = keyboards.keyboard_create(options)
-        bot_send.update_keyboard(user, Text_for.keyboards.get('work'), keyboard)
-        set_active_keyboard(user, options)
+        work_keyboard(user)
+
     elif text == Text_for.button['necromancy']:
-        options = ['skills', 'skel_create', 'skel_work']
-        keyboard = keyboards.keyboard_create(options)
-        bot_send.update_keyboard(user, callbacks.necromancy_text(necr), keyboard)
-        set_active_keyboard(user, options)
+        necromancy_keyboard(user, necr)
+
+    elif text == Text_for.button['upgrade']:
+        pass
+
     else:
         undefait_text(user)
+
+
+def work_keyboard(user):
+    options = work_options
+    keyboard = keyboards.keyboard_create(options)
+    bot_send.update_keyboard(user, Text_for.keyboards.get('work'), keyboard)
+    set_active_keyboard(user, options)
+
+
+def necromancy_keyboard(user, necr):
+    options = necromancy_options
+    keyboard = keyboards.keyboard_create(options)
+    bot_send.update_keyboard(user, callbacks.necromancy_text(necr), keyboard)
+    set_active_keyboard(user, options)
 
 
 def work_key(user, text):
@@ -346,6 +368,10 @@ def work_key(user, text):
     elif (need_heal_hum or need_kill_hum) and not have_energy:
         bot_send.message(user, Text_for.Error['no_energy'])
 
+    main_keyboard(user)
+
+
+def main_keyboard(user):
     options = main_options
     keyboard = keyboards.keyboard_create(options)
     bot_send.update_keyboard(user, Text_for.keyboards.get('main'), keyboard)
@@ -353,46 +379,69 @@ def work_key(user, text):
 
 
 def necromancy_key(user, text):
-    skills = text == Text_for.button['skills']
+    # skills = text == Text_for.button['skills']
     skel_create = text == Text_for.button['bones_to_skeleton']
-    skel_management = text == Text_for.button['skel_work']
+    back = text == Text_for.button['back']
 
     necr = get_necr_from_stack(user.chat_id)
 
     have_bones_for_create = bones_check(necr, balance.skeleton_need_bones)
 
-    if skills:
-        bot_send.message(user, callbacks.skills(necr))
+    # if skills:
+    #   bot_send.message(user, callbacks.skills(necr))
 
-    elif skel_create and have_bones_for_create:
+    if skel_create and have_bones_for_create:
         create_skeleton(necr)
         bot_send.message(user, Text_for.complite['bones_to_skeleton'])
+
     elif skel_create and not have_bones_for_create:
         bot_send.message(user, Text_for.Error['no_bones'])
 
-    elif skel_management:
-        options = skel_work_options
-        keyboard = keyboards.keyboard_create(options)
-        bot_send.update_keyboard(user, callbacks, keyboard)
-        set_active_keyboard(user, options)
+    elif back:
+        main_keyboard(user)
+
+    else:
+        skel_work_key(user, text)
+
+    necromancy_keyboard(user, necr)
 
 
-def skel_work_callback(user, text):
-    need_farmer = text == Text_for.button['to_farmer']
-    need_defer = text == Text_for.button['to_defer']
-    need_attacker = text == Text_for.button['to_attacker']
-    have_waiter = skeleton_waiter_check(user)
-    if need_farmer and have_waiter:
-        skeleton_go_to(user, 'farmer')
-        bot_send.message(user, Text_for.complite['to_farmer'])
-    elif need_defer and have_waiter:
-        skeleton_go_to(user, 'defer')
-        bot_send.message(user, Text_for.complite['to_defer'])
-    elif need_attacker and have_waiter:
-        skeleton_go_to(user, 'attacker')
-        bot_send.message(user, Text_for.complite['to_attacker'])
-    elif (need_farmer or need_defer or need_attacker) and not have_waiter:
+def skel_work_key(user, text):
+    to_farmer = text == Text_for.button['to_farmer']
+    to_defer = text == Text_for.button['to_defer']
+    to_attacker = text == Text_for.button['to_attacker']
+    to_reset = text == Text_for.button['to_reset']
+
+    necr = get_necr_from_stack(user.chat_id)
+
+    have_waiter = skeleton_waiter_check(necr)
+
+    if (to_farmer or to_defer or to_attacker) and not have_waiter:
         bot_send.message(user, Text_for.Error['no_waiter'])
+
+    elif to_reset:
+        skeleton_to_reset(necr)
+        bot_send.message(user, Text_for.complite['to_reset'])
+
+    elif to_farmer and have_waiter:
+        skeleton_go_to(necr, 'farmer')
+        bot_send.message(user, Text_for.complite['to_farmer'])
+
+    elif to_defer and have_waiter:
+        skeleton_go_to(necr, 'defer')
+        bot_send.message(user, Text_for.complite['to_defer'])
+
+    elif to_attacker and have_waiter:
+        skeleton_go_to(necr, 'attacker')
+        bot_send.message(user, Text_for.complite['to_attacker'])
+
+
+def skeleton_to_reset(necr):
+    all_skeletons = necr.get_all_skeletons()
+    necr.skeletons = {'waiter': all_skeletons,
+                      'farmer': 0,
+                      'defer': 0,
+                      'attacker': 0}
 
 
 def undefait_text(user):

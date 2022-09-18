@@ -52,6 +52,17 @@ class Necromant:
         }
         return necromant
 
+    def get_all_skeletons(self):
+        all_skeletons = self.skeletons.get('waiter') + \
+                        self.skeletons.get('farmer') + \
+                        self.skeletons.get('defer') + \
+                        self.skeletons.get('attacker')
+        return all_skeletons
+
+    def get_maximum_skeletons(self):
+        max_skel = self.level * balance.max_skeletons_for_lvl
+        return max_skel
+
     def add_energy(self, change=1):
         self.energy += change
 

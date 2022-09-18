@@ -3,7 +3,7 @@ import random
 # bones
 max_bones_start = 50
 max_bones_for_lvl_basement = 20
-bones_for_kill_human = 5
+bones_for_kill_human = 20
 bones_for_kill_skeleton = 5
 bones_for_kill_rouge = 10
 bones_for_kill_guard = 20
@@ -18,6 +18,7 @@ gold_for_def_event = 10
 # skeleton
 skeleton_need_bones = 20
 need_attackers_for_attack_event = 1
+max_skeletons_for_lvl = 5
 
 # energy
 max_energy = 20

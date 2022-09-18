@@ -19,14 +19,16 @@ class Text_for:
               'heal_hum': 'Вылечить пациента',
               'work': 'Госпиталь',
               'bones_to_skeleton': 'Создать прислужника',
-              'to_farmer': 'Направить скелета собирать кости',
-              'to_defer': 'Направить скелета защищать дом',
-              'to_attacker': 'Направить скелета в атаку',
+              'to_farmer': 'Сбор',
+              'to_defer': 'Защита',
+              'to_attacker': 'Атака',
               'necr_info': 'info-инвентарь',
               'necromancy': 'Некромантия',
               'skills': 'Навыки',
               'to_reset': 'Вернуть скелетов',
-              'skel_work': 'Направить скелетов'}
+              'skel_work': 'Направить скелетов',
+              'upgrade': 'Улучшения',
+              'back': 'Назад'}
 
     Error = {'no_energy': 'Не хватает энергии',
              'no_bones': 'Не хватает костей',
@@ -37,12 +39,13 @@ class Text_for:
     complite = {'kill_hum': f'Вы нашли бедалагу которого никто не вспомнит '
                             f'\n +{balance.bones_for_kill_human} костей',
                 'heal_hum': f'Получено вознаграждение после тяжелого рабочего дня'
-                        f'\n +{balance.gold_for_work} золотых',
+                            f'\n +{balance.gold_for_work} золотых',
                 'bones_to_skeleton': f'Еще один прислужник ждет приказа'
                                      f'\n -{balance.skeleton_need_bones} костей',
                 'to_farmer': 'Cкелет отправился в лес добыть кости',
                 'to_defer': 'Cкелет отправился охранять дом',
-                'to_attacker': 'Cкелет отправился готовится к наступлению'}
+                'to_attacker': 'Cкелет отправился готовится к наступлению',
+                'to_reset': 'Скелеты вернулись к вам в дом'}
 
     event_button = {'confirm': 'Понятненько!',
                     'start_attack': 'Начать атаку',
@@ -56,10 +59,11 @@ class Text_for:
 
     callback = {'create': 'Cоздан пользователь с id '}
 
-    keyboards = {'main': 'вы у себя дома',
+    keyboards = {'main': 'Вы у себя дома',
                  'work': 'Вы нашли пациента, которого уже не спасти, что с ним делать?',
                  'necromancy': 'PIVO necromancy',
                  'skel_work_options': 'Решите как использовать ваших прислужников'}
+
     skills = {'lvl0': 'вы еще не достойны пить pivo',
               'lvl1': 'вы можете выпить 1 pivo',
               'lvl2': 'вы можете выпить 2 pivo',

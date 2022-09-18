@@ -17,7 +17,7 @@ def create(user: roles.User):
 
 
 def text_welcome(user: roles.User):
-    return f'Привет {user.username}'
+    return f'Привет {user.name}'
 
 
 def info_necr(necr: roles.Necromant):
@@ -28,7 +28,14 @@ def info_necr(necr: roles.Necromant):
 
 
 def necromancy_text(necr: roles.Necromant):
-    return f'Ур. Некромантии: {necr.level}'
+    necromancy_info = f'Ур. Некромантии: {necr.level}\n' \
+                      f'Костей: {necr.bones}/{necr.get_max_bones()}\n' \
+                      f'Всего скелетов: {necr.get_all_skeletons()}/{necr.get_maximum_skeletons()}\n' \
+                      f'Свободных: {necr.skeletons.get("waiter")}\n' \
+                      f'Собиратель: {necr.skeletons.get("farmer")}\n' \
+                      f'Защитник: {necr.skeletons.get("defer")}\n' \
+                      f'Атакующий:  {necr.skeletons.get("attacker")}'
+    return necromancy_info
 
 
 def registration(user):
