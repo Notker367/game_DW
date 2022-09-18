@@ -3,6 +3,7 @@ import random
 # bones
 max_bones_start = 50
 max_bones_for_lvl_basement = 20
+
 bones_for_kill_human = 20
 bones_for_kill_skeleton = 5
 bones_for_kill_rouge = 10
@@ -11,9 +12,14 @@ bones_for_kill_guard = 20
 # gold
 max_gold_start = 100
 max_gold_for_lvl_chest = 20
+
 gold_for_work = 20
 gold_for_rouge = 10
 gold_for_def_event = 10
+
+gold_for_buy_up_basement = 15
+gold_for_buy_up_chest = 10
+gold_for_buy_up_lvl = 20
 
 # skeleton
 skeleton_need_bones = 20

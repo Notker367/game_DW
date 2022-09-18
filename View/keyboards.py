@@ -16,6 +16,37 @@ def keyboard_create(buttons=[]):
     keyboard = mian_options_check(buttons, keyboard)
     keyboard = necromancy_options_check(buttons, keyboard)
     keyboard = work_options_check(buttons, keyboard)
+    keyboard = upgrade_options_check(buttons, keyboard)
+    if 'back' in buttons:
+        keyboard = add_back(keyboard)
+    return keyboard
+
+
+def upgrade_options_check(buttons, keyboard):
+    if 'up_basement' in buttons:
+        keyboard = add_up_basement(keyboard)
+    if 'up_chest' in buttons:
+        keyboard = add_up_chest(keyboard)
+    if 'up_lvl' in buttons:
+        keyboard = add_up_lvl(keyboard)
+    return keyboard
+
+
+def add_up_basement(keyboard):
+    up_basement_but = k_button(text_button.get('up_basement'))
+    keyboard.add(up_basement_but)
+    return keyboard
+
+
+def add_up_chest(keyboard):
+    up_chest_but = k_button(text_button.get('up_chest'))
+    keyboard.add(up_chest_but)
+    return keyboard
+
+
+def add_up_lvl(keyboard):
+    up_lvl_but = k_button(text_button.get('up_lvl'))
+    keyboard.add(up_lvl_but)
     return keyboard
 
 
@@ -30,7 +61,7 @@ def work_options_check(buttons, keyboard):
 def necromancy_options_check(buttons, keyboard):
     if 'bones_to_skeleton' in buttons:
         keyboard = add_skeleton_create(keyboard)
-    if 'to_farmer'in buttons:
+    if 'to_farmer' in buttons:
         keyboard = add_skeleton_to_farmer(keyboard)
     if 'to_defer' in buttons:
         keyboard = add_skeleton_to_defer(keyboard)
@@ -38,8 +69,6 @@ def necromancy_options_check(buttons, keyboard):
         keyboard = add_skeleton_to_attacker(keyboard)
     if 'to_reset' in buttons:
         keyboard = add_skeleton_to_reset(keyboard)
-    if 'back' in buttons:
-        keyboard = add_back(keyboard)
     return keyboard
 
 

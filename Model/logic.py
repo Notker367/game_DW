@@ -27,6 +27,11 @@ necromancy_options = ['bones_to_skeleton',
                       'to_reset',
                       'back']
 
+upgrade_options = ['up_basement',
+                   'up_chest',
+                   'up_lvl',
+                   'back']
+
 
 def add_user_stack(user: roles.User, necr: roles.Necromant):
     chat_id = try_type(user.chat_id)
@@ -263,6 +268,13 @@ def bones_check(me, need_bones):
         return False
 
 
+def gold_check(necr: roles.Necromant, need_gold):
+    if necr.gold >= need_gold:
+        return True
+    else:
+        return False
+
+
 def active_buttons(user):
     necr = db.get_necromant(user)
     return necr.get_keyboard()
@@ -320,20 +332,33 @@ def user_info_db(chat_id):
 def main_key(user, text):
     necr = get_necr_from_stack(user.chat_id)
 
+    have_energy = energy_check(necr)
+
     if text == Text_for.button['necr_info']:
         bot_send.message(user, callbacks.info_necr(necr))
 
     elif text == Text_for.button['work']:
-        work_keyboard(user)
+        if have_energy:
+            work_keyboard(user)
+        else:
+            bot_send.message(user, Text_for.Error.get('no_energy'))
 
     elif text == Text_for.button['necromancy']:
         necromancy_keyboard(user, necr)
 
     elif text == Text_for.button['upgrade']:
-        pass
+        bot_send.message(user, Text_for.keyboards.get('upgrade'))
+        upgrade_keyboard(user, necr)
 
     else:
         undefait_text(user)
+
+
+def upgrade_keyboard(user, necr):
+    options = upgrade_options
+    keyboard = keyboards.keyboard_create(options)
+    bot_send.update_keyboard(user, callbacks.upgrade_text(necr), keyboard)
+    set_active_keyboard(user, options)
 
 
 def work_keyboard(user):
@@ -348,6 +373,59 @@ def necromancy_keyboard(user, necr):
     keyboard = keyboards.keyboard_create(options)
     bot_send.update_keyboard(user, callbacks.necromancy_text(necr), keyboard)
     set_active_keyboard(user, options)
+
+
+def back_key(user, text):
+    necr = get_necr_from_stack(user.chat_id)
+
+    if text == Text_for.button.get('back') and 'back' in necr.get_keyboard():
+        return True
+    else:
+        return False
+
+
+def upgrade_key(user, text):
+    up_basement = text == Text_for.button.get('up_basement')
+    up_chest = text == Text_for.button.get('up_chest')
+    up_lvl = text == Text_for.button.get('up_lvl')
+
+    necr = get_necr_from_stack(user.chat_id)
+
+    have_gold_for_basement = gold_check(necr, balance.gold_for_buy_up_basement)
+    have_gold_for_chest = gold_check(necr, balance.gold_for_buy_up_chest)
+    have_gold_for_lvl = gold_check(necr, balance.gold_for_buy_up_lvl)
+
+    if up_basement and have_gold_for_basement:
+        buy_basement(necr)
+        bot_send.message(user, Text_for.complite['up_lvl_basement'])
+
+    elif up_chest and have_gold_for_chest:
+        buy_chest(necr)
+        bot_send.message(user, Text_for.complite['up_lvl_chest'])
+
+    elif up_lvl and have_gold_for_lvl:
+        buy_lvl(necr)
+        bot_send.message(user, Text_for.complite['lvlup'])
+
+    elif up_basement or up_chest or up_lvl:
+        bot_send.message(user, Text_for.Error.get('no_gold'))
+
+    upgrade_keyboard(user, necr)
+
+
+def buy_lvl(necr):
+    necr.take_gold(balance.gold_for_buy_up_lvl)
+    necr.lvlup()
+
+
+def buy_chest(necr):
+    necr.take_gold(balance.gold_for_buy_up_chest)
+    necr.up_lvl_chest()
+
+
+def buy_basement(necr):
+    necr.take_gold(balance.gold_for_buy_up_basement)
+    necr.up_lvl_basement()
 
 
 def work_key(user, text):
@@ -396,9 +474,6 @@ def necromancy_key(user, text):
 
     elif skel_create and not have_bones_for_create:
         bot_send.message(user, Text_for.Error['no_bones'])
-
-    elif back:
-        main_keyboard(user)
 
     else:
         skel_work_key(user, text)

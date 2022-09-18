@@ -102,6 +102,12 @@ class Necromant:
             return False
         return self.keyboard
 
+    def up_lvl_chest(self):
+        self.lvl_chest += 1
+
+    def up_lvl_basement(self):
+        self.lvl_basement += 1
+
     def set_keyboard(self, buttons: list):
         self.keyboard = buttons
 
