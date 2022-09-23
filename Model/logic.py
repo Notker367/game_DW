@@ -84,9 +84,11 @@ def add_new_user(chat_id, name, username, create_time):
                           create_time=create_time,
                           necromant=roles.Necromant()
                           )
+    new_necr = new_user.necromant
     db.set_user(new_user)
-    db.set_necromant(new_user, roles.Necromant())
+    db.set_necromant(new_user, new_necr)
     bot_send.message(new_user, callbacks.registration(new_user))
+    add_user_stack(new_user, new_necr)
     undefait_text(new_user)
 
 
@@ -527,6 +529,12 @@ def undefait_text(user):
     else:
         keyboard = keyboards.keyboard_create(['start'])
     bot_send.update_keyboard(user, Text_for.Error['undefait'], keyboard)
+
+
+def undefait_text_no_user(message):
+    print(f'Пользователь {message.chat.id} не найден, неизвестный текст: {message.text}')
+    keyboard = keyboards.keyboard_create(['start'])
+    bot_send.update_keyboard_no_user(message, Text_for.Error['undefait_no_user'], keyboard)
 
 
 def try_type(chat_id):

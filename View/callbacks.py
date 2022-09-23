@@ -39,7 +39,7 @@ def upgrade_text(necr: roles.Necromant):
 
 
 def registration(user):
-    return f'{user.username}, вы зарегистрированы'
+    return f'{user.name}, вы зарегистрированы'
 
 
 def skills(necr: roles.Necromant):

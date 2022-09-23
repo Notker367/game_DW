@@ -3,7 +3,7 @@ from Model import balance
 
 class Necromant:
 
-    def __init__(self, energy=0, bones=0, gold=0, level=0,
+    def __init__(self, energy=30, bones=0, gold=0, level=0,
                  keyboard=None, skeletons=None,
                  cd_event=0, lvl_basement=0, lvl_chest=0):
         self.energy = energy

@@ -43,6 +43,8 @@ def info_user(message):
 @bot.message_handler(content_types=['text'])
 def request(message):
     user = why_me(message)
+    if not user:
+        logic.undefait_text_no_user(message)
     options = logic.get_active_keyboard(user)
     text = message.text
 
