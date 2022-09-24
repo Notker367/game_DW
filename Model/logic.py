@@ -541,3 +541,13 @@ def try_type(chat_id):
     if chat_id is not str:
         chat_id = str(chat_id)
     return chat_id
+
+
+def save_from_stack_to_db():
+    users = user_list.keys()
+    for user in users:
+        chat_id = user.chat_id
+        user = get_user_from_stack(chat_id)
+        necr = get_necr_from_stack(chat_id)
+        db.save(user, necr)
+        print(f'Пользователь {user.chat_id} сохранен')

@@ -88,4 +88,9 @@ def bot_send(user, text):
     bot.send_message(user.chat_id, text)
 
 
-bot.polling(none_stop=True, interval=0)
+# bot.polling(none_stop=True, interval=0)
+while True:
+    try:
+        bot.polling()
+    except:
+        logic.save_from_stack_to_db()
