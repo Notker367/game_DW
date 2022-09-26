@@ -33,12 +33,12 @@ upgrade_options = ['up_basement',
                    'back']
 
 
-def add_user_stack(user: roles.User, necr: roles.Necromant):
+def add_user_stack(user: roles.User, necr: roles.Necromant, story: roles.Story):
     chat_id = try_type(user.chat_id)
 
     new_user = {'user': user,
                 'necr': necr,
-                'story': None}
+                'story': story}
     user_list.update({chat_id: new_user})
     print(f'Добавлен пользователь в стак - {new_user}')
     welcome(user)
@@ -85,8 +85,11 @@ def add_new_user(chat_id, name, username, create_time):
                           necromant=roles.Necromant()
                           )
     new_necr = new_user.necromant
+
     db.set_user(new_user)
     db.set_necromant(new_user, new_necr)
+    db.set_story(new_user)
+
     bot_send.message(new_user, callbacks.registration(new_user))
     add_user_stack(new_user, new_necr)
     undefait_text(new_user)
@@ -545,9 +548,11 @@ def try_type(chat_id):
 
 def save_from_stack_to_db():
     users = user_list.keys()
+    print(users)
     for user in users:
-        chat_id = user.chat_id
+        chat_id = user
         user = get_user_from_stack(chat_id)
         necr = get_necr_from_stack(chat_id)
         db.save(user, necr)
         print(f'Пользователь {user.chat_id} сохранен')
+    print('Все пользователи сохранены')

@@ -23,6 +23,20 @@ class Necromant:
         self.lvl_basement = lvl_basement
         self.lvl_chest = lvl_chest
 
+    def to_dict(self):
+        necromant = {
+            'energy': self.energy,
+            'bones': self.bones,
+            'gold': self.gold,
+            'level': self.level,
+            'keyboard': self.keyboard,
+            'skeletons': self.skeletons,
+            'cd_event': self.cd_event,
+            'lvl_basement': self.lvl_basement,
+            'lvl_chest': self.lvl_chest
+        }
+        return necromant
+
     @staticmethod
     def from_dict(necr_info):
         necromant = Necromant(
@@ -36,20 +50,6 @@ class Necromant:
             lvl_basement=necr_info.get('lvl_basement'),
             lvl_chest=necr_info.get('lvl_chest')
         )
-        return necromant
-
-    def to_dict(self):
-        necromant = {
-            'energy': self.energy,
-            'bones': self.bones,
-            'gold': self.gold,
-            'level': self.level,
-            'keyboard': self.keyboard,
-            'skeletons': self.skeletons,
-            'cd_event': self.cd_event,
-            'lvl_basement': self.lvl_basement,
-            'lvl_chest': self.lvl_chest
-        }
         return necromant
 
     def get_all_skeletons(self):
@@ -129,7 +129,24 @@ class Necromant:
 
 
 class Story:
-    pass
+    def __int__(self, story=None):
+        if story is None:
+            self.story = {'story1': False,
+                          'story2': False,
+                          'story3': False}
+
+    def to_dict(self):
+        story = {
+            'story': self.story
+        }
+        return story
+
+    @staticmethod
+    def from_dict(story_info):
+        story = Story(
+            story=story_info.get('story')
+        )
+        return story
 
 
 class User:

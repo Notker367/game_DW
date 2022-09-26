@@ -59,6 +59,16 @@ def get_necromant(user: roles.User):
     return necr
 
 
+def set_story(user: roles.User, story: roles.Story):
+    chat_id = check_chat_id(user.chat_id)
+    doc = c_world(chat_id).document('Necromant')
+    doc.set(story.to_dict())
+
+
+def get_story(user: roles.User):
+    pass
+
+
 def save(user: roles.User, necr: roles.Necromant):
     set_user(user)
     set_necromant(user, necr)
