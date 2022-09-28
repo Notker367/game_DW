@@ -459,16 +459,11 @@ def main_keyboard(user):
 
 
 def necromancy_key(user, text):
-    # skills = text == Text_for.button['skills']
     skel_create = text == Text_for.button['bones_to_skeleton']
-    back = text == Text_for.button['back']
 
     necr = get_necr_from_stack(user.chat_id)
 
     have_bones_for_create = bones_check(necr, balance.skeleton_need_bones)
-
-    # if skills:
-    #   bot_send.message(user, callbacks.skills(necr))
 
     if skel_create and have_bones_for_create:
         create_skeleton(necr)

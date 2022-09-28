@@ -81,3 +81,5 @@ class Text_for:
               'lvl3': 'вы можете выпить 3 pivo',
               'lvl4': 'вы можете выпить 4 pivo',
               'lvl5': 'вы можете выпить 5 pivo'}
+
+    story = {}
