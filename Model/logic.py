@@ -539,9 +539,8 @@ def try_type(chat_id):
 
 
 def save_from_stack_to_db():
-    users = user_list.keys() #fix
-    for user in users:
-        chat_id = user.chat_id
+    users = user_list.keys() #fix-
+    for chat_id in users:
         user = get_user_from_stack(chat_id)
         necr = get_necr_from_stack(chat_id)
         db.save(user, necr)
