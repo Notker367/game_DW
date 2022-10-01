@@ -118,12 +118,12 @@ def get_user(chat_id):
         user_from_stack = get_user_from_stack(chat_id)
         print(f'User {chat_id} on stack')
         return user_from_stack
-    user_from_bd, necr_from_bd = db.load(chat_id)
-    if user_from_bd:
+    user_from_db, necr_from_db, story_from_db = db.load(chat_id)
+    if user_from_db:
         print(f'User {chat_id} on DB')
-        add_user_stack(user_from_bd, necr_from_bd)
+        add_user_stack(user_from_db, necr_from_db, story_from_db)
         print(f'Add user {chat_id} in stack')
-        return user_from_bd
+        return user_from_db
     else:
         return False
 
@@ -556,3 +556,7 @@ def save_from_stack_to_db():
         db.save(user, necr)
         print(f'Пользователь {user.chat_id} сохранен')
     print('Все пользователи сохранены')
+
+
+def view_stack():
+    print(user_list)

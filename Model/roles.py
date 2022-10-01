@@ -38,7 +38,7 @@ class Necromant:
         return necromant
 
     @staticmethod
-    def from_dict(necr_info):
+    def from_dict(necr_info: dict):
         necromant = Necromant(
             energy=necr_info.get('energy'),
             bones=necr_info.get('bones'),
@@ -129,22 +129,22 @@ class Necromant:
 
 
 class Story:
-    def __int__(self, story=None):
-        if story is None:
-            self.story = {'story1': False,
-                          'story2': False,
-                          'story3': False}
+    def __init__(self, part='story1', choice=[]):
+        self.part = part
+        self.choice = choice
 
     def to_dict(self):
         story = {
-            'story': self.story
+            'part': self.part,
+            'choice': self.choice
         }
         return story
 
     @staticmethod
-    def from_dict(story_info):
+    def from_dict(story_info: dict):
         story = Story(
-            story=story_info.get('story')
+            part=story_info.get('part'),
+            choice=story_info.get('choice')
         )
         return story
 

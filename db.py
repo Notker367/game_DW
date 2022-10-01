@@ -50,33 +50,51 @@ def set_necromant(user: roles.User, necr: roles.Necromant):
 
 def get_necromant(user: roles.User):
     chat_id = check_chat_id(user.chat_id)
+
     doc = c_world(chat_id).document('Necromant')
     doc = doc.get()
     if not doc.exists:
         return False
+
     necr_info = doc.to_dict()
     necr = roles.Necromant.from_dict(necr_info)
+
     return necr
 
 
 def set_story(user: roles.User, story: roles.Story):
     chat_id = check_chat_id(user.chat_id)
-    doc = c_world(chat_id).document('Necromant')
+
+    doc = c_world(chat_id).document('Story')
     doc.set(story.to_dict())
 
 
 def get_story(user: roles.User):
-    pass
+    chat_id = check_chat_id(user.chat_id)
+
+    doc = c_world(chat_id).document('Story')
+    doc = doc.get()
+    if not doc.exists:
+        return False
+
+    story_info = doc.to_dict()
+    story = roles.Story.from_dict(story_info)
+
+    return story
 
 
-def save(user: roles.User, necr: roles.Necromant):
+def save(user: roles.User,
+         necr: roles.Necromant,
+         story: roles.Story):
     set_user(user)
     set_necromant(user, necr)
+    set_story(user, story)
 
 
 def load(chat_id):
     user = get_user(chat_id)
     if not user:
-        return False, False
+        return False, False, False
     necr = get_necromant(user)
-    return user, necr
+    story = get_story(user)
+    return user, necr, story

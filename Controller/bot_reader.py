@@ -40,6 +40,12 @@ def info_user(message):
     logic.user_info_db(user.chat_id)
 
 
+@bot.message_handler(commands=["stack"])
+def info_user(message):
+    # user = why_me(message)
+    logic.view_stack()
+
+
 @bot.message_handler(content_types=['text'])
 def request(message):
     user = why_me(message)
