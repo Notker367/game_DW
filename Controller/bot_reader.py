@@ -16,6 +16,7 @@ def why_me(message):
 
 @bot.message_handler(commands=["kill_me"])
 def kill_me(message):
+    logic.save_from_stack_to_db()
     print(fast.end.program)
 
 
@@ -41,7 +42,7 @@ def info_user(message):
 
 
 @bot.message_handler(commands=["stack"])
-def info_user(message):
+def stack(message):
     # user = why_me(message)
     logic.view_stack()
 

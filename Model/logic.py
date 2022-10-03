@@ -85,13 +85,14 @@ def add_new_user(chat_id, name, username, create_time):
                           necromant=roles.Necromant()
                           )
     new_necr = new_user.necromant
+    new_story = roles.Story()
 
     db.set_user(new_user)
     db.set_necromant(new_user, new_necr)
-    db.set_story(new_user)
+    db.set_story(new_user, new_story)
 
     bot_send.message(new_user, callbacks.registration(new_user))
-    add_user_stack(new_user, new_necr)
+    add_user_stack(new_user, new_necr, new_story)
     undefait_text(new_user)
 
 
@@ -553,7 +554,8 @@ def save_from_stack_to_db():
         chat_id = user
         user = get_user_from_stack(chat_id)
         necr = get_necr_from_stack(chat_id)
-        db.save(user, necr)
+        story = get_story_from_stack(chat_id)
+        db.save(user, necr, story)
         print(f'Пользователь {user.chat_id} сохранен')
     print('Все пользователи сохранены')
 
