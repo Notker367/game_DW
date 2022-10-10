@@ -129,7 +129,7 @@ class Necromant:
 
 
 class Story:
-    def __init__(self, part='story1', choice=[]):
+    def __init__(self, part='story0', choice=[]):
         self.part = part
         self.choice = choice
 

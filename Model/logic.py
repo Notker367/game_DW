@@ -1,6 +1,6 @@
-from Model import roles, balance
+from Model import roles, balance, story_block
 from View import keyboards, bot_send, callbacks
-from View.Texts import Text_for
+from View.Texts import Text_for, Story_text
 import db
 
 user_list = {}
@@ -14,6 +14,10 @@ user_list = {}
 request_text = {}
 users_time = {}
 need_event = False
+
+story_options = {'continue_story',
+                 'skip_story',
+                 'continue'}
 
 main_options = ['info_necr',
                 'work',
@@ -31,6 +35,29 @@ upgrade_options = ['up_basement',
                    'up_chest',
                    'up_lvl',
                    'back']
+
+
+def key_check(options, text, user):
+    if back_key(user, text):
+        main_keyboard(user)
+
+    elif set(options).issubset(main_options):
+        main_key(user, text)
+
+    elif set(options).issubset(work_options):
+        work_key(user, text)
+
+    elif set(options).issubset(necromancy_options):
+        necromancy_key(user, text)
+
+    elif set(options).issubset(upgrade_options):
+        upgrade_key(user, text)
+
+    #elif set(options).issubset(story_options):
+        #story_block.(user, text)
+
+    else:
+        undefait_text(user)
 
 
 def add_user_stack(user: roles.User, necr: roles.Necromant, story: roles.Story):
@@ -78,11 +105,12 @@ def registration(message):
 
 
 def add_new_user(chat_id, name, username, create_time):
+    options = ['continue_story', 'skip_story']
     new_user = roles.User(chat_id=chat_id,
                           name=name,
                           username=username,
                           create_time=create_time,
-                          necromant=roles.Necromant()
+                          necromant=roles.Necromant(keyboard=options)
                           )
     new_necr = new_user.necromant
     new_story = roles.Story()
@@ -91,18 +119,18 @@ def add_new_user(chat_id, name, username, create_time):
     db.set_necromant(new_user, new_necr)
     db.set_story(new_user, new_story)
 
-    bot_send.message(new_user, callbacks.registration(new_user))
+    bot_send.message(new_user, Story_text.story0)
+
     add_user_stack(new_user, new_necr, new_story)
-    undefait_text(new_user)
 
 
 def welcome(user: roles.User):
-    chat_id = try_type(user.chat_id)
-    necr = get_necr_from_stack(chat_id)
-    options = necr.get_keyboard()
+    options = get_active_keyboard(user)
+
     if not options:
         keyboard = keyboards.keyboard_create(main_options)
         set_active_keyboard(user, main_options)
+
     else:
         keyboard = keyboards.keyboard_create(options)
     bot_send.update_keyboard(user, callbacks.text_welcome(user), keyboard)
@@ -349,13 +377,14 @@ def main_key(user, text):
 
     have_energy = energy_check(necr)
 
-    if text == Text_for.button['necr_info']:
+    if text == Text_for.button['info_necr']:
         bot_send.message(user, callbacks.info_necr(necr))
 
     elif text == Text_for.button['work']:
         if have_energy:
             work_keyboard(user)
         else:
+            story_step(user)
             bot_send.message(user, Text_for.Error.get('no_energy'))
 
     elif text == Text_for.button['necromancy']:
@@ -537,10 +566,12 @@ def skeleton_to_reset(necr):
 def undefait_text(user):
     necr = get_necr_from_stack(user.chat_id)
     actual_keyboard = necr.get_keyboard()
+
     if actual_keyboard:
         keyboard = keyboards.keyboard_create(actual_keyboard)
     else:
         keyboard = keyboards.keyboard_create(['start'])
+
     bot_send.update_keyboard(user, Text_for.Error['undefait'], keyboard)
 
 
@@ -573,5 +604,8 @@ def view_stack():
     print(user_list)
 
 
-def check_story(user: roles.User):
-    pass
+def story_step(user: roles.User):
+    chat_id = user.chat_id
+    story = get_story_from_stack(chat_id)
+
+    story_block.check(story)

@@ -22,16 +22,20 @@ class Text_for:
               'to_farmer': 'Разведка',
               'to_defer': 'Защита',
               'to_attacker': 'Атака',
-              'necr_info': 'info-инвентарь',
+              'info_necr': 'info-инвентарь',
               'necromancy': 'Некромантия',
               'skills': 'Навыки',
               'to_reset': 'Вернуть скелетов',
               'skel_work': 'Направить скелетов',
-              'upgrade': 'Улучшения',
+              'upgrade': 'Рынок',
               'back': 'Назад',
               'up_basement': f'Расширить подвал',
               'up_chest': f'Купить сундук',
-              'up_lvl': f'Заняться расшифровкой'
+              'up_lvl': f'Заняться расшифровкой',
+              'continue': 'Продолжить',
+              'skip': 'Пропустить',
+              'continue_story': 'Узнать историю',
+              'skip_story': 'Пропустить вступление'
               }
 
     Error = {'no_energy': 'Не хватает энергии',
@@ -84,4 +88,6 @@ class Text_for:
 
 
 class Story_text:
-    story1 = {'story1 bla-bla'}
+    story0 = 'story0 Это итория про пиво... \n' \
+             '...Вы можете пропустить или прочитать вступление'
+    story1 = 'story1 bla-bla'

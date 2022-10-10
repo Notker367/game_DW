@@ -55,26 +55,9 @@ def request(message):
         return
 
     text = message.text
-    logic.check_story(user)
     options = logic.get_active_keyboard(user)
 
-    if logic.back_key(user, text):
-        logic.main_keyboard(user)
-
-    elif set(options).issubset(logic.main_options):
-        logic.main_key(user, text)
-
-    elif set(options).issubset(logic.work_options):
-        logic.work_key(user, text)
-
-    elif set(options).issubset(logic.necromancy_options):
-        logic.necromancy_key(user, text)
-
-    elif set(options).issubset(logic.upgrade_options):
-        logic.upgrade_key(user, text)
-
-    else:
-        logic.undefait_text(user)
+    logic.key_check(options, text, user)
 
 
 def start_event(user):

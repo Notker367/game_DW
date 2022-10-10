@@ -8,6 +8,7 @@ text_event = Texts.Text_for.event_button
 
 
 def keyboard_create(buttons=[]):
+    print(f'Создаю клавиатуру с {buttons}')
     keyboard = bot.types.ReplyKeyboardMarkup(resize_keyboard=True)
     if 'info_user' in buttons:
         keyboard = add_info_user(keyboard)
@@ -19,6 +20,8 @@ def keyboard_create(buttons=[]):
     keyboard = upgrade_options_check(buttons, keyboard)
     if 'back' in buttons:
         keyboard = add_back(keyboard)
+    if not keyboard.keyboard:
+        keyboard = keyboard_story_create(buttons)
     return keyboard
 
 
@@ -218,17 +221,8 @@ def event_attack(keyboard):
     return keyboard
 
 
-def main():
-    keyboard = keyboard_create()
-    info_necr_but = k_button(text_button['necr_info'])
-    work_but = k_button(text_button['work'])
-    necromancy_but = k_button(text_button['necromancy'])
-    keyboard.add(info_necr_but, work_but, necromancy_but, row_width=1)
-    return keyboard
-
-
 def add_info_necr(keyboard):
-    info_necr_but = k_button(text_button['necr_info'])
+    info_necr_but = k_button(text_button['info_necr'])
     keyboard.add(info_necr_but)
     return keyboard
 
@@ -243,3 +237,14 @@ def add_necromancy(keyboard):
     necromancy_but = k_button(text_button['necromancy'])
     keyboard.add(necromancy_but)
     return keyboard
+
+
+def keyboard_story_create(buttons=[]):
+    keyboard = bot.types.ReplyKeyboardMarkup(resize_keyboard=True)
+
+    for button in buttons:
+        but = k_button(text_button[button])
+        keyboard.add(but)
+
+    return keyboard
+
