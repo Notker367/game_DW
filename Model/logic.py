@@ -96,9 +96,15 @@ def add_new_user(chat_id, name, username, create_time):
     undefait_text(new_user)
 
 
-def welcome(user):
-    keyboard = keyboards.keyboard_create(main_options)
-    set_active_keyboard(user, main_options)
+def welcome(user: roles.User):
+    chat_id = try_type(user.chat_id)
+    necr = get_necr_from_stack(chat_id)
+    options = necr.get_keyboard()
+    if not options:
+        keyboard = keyboards.keyboard_create(main_options)
+        set_active_keyboard(user, main_options)
+    else:
+        keyboard = keyboards.keyboard_create(options)
     bot_send.update_keyboard(user, callbacks.text_welcome(user), keyboard)
 
 
@@ -115,16 +121,19 @@ def set_active_keyboard(user: roles.User, options):
 
 def get_user(chat_id):
     chat_id = try_type(chat_id)
+
     if chat_id in user_list:
         user_from_stack = get_user_from_stack(chat_id)
         print(f'User {chat_id} on stack')
         return user_from_stack
+
     user_from_db, necr_from_db, story_from_db = db.load(chat_id)
     if user_from_db:
         print(f'User {chat_id} on DB')
         add_user_stack(user_from_db, necr_from_db, story_from_db)
         print(f'Add user {chat_id} in stack')
         return user_from_db
+
     else:
         return False
 
@@ -562,3 +571,7 @@ def save_from_stack_to_db():
 
 def view_stack():
     print(user_list)
+
+
+def check_story(user: roles.User):
+    pass

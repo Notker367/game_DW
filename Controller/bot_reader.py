@@ -52,8 +52,11 @@ def request(message):
     user = why_me(message)
     if not user:
         logic.undefait_text_no_user(message)
-    options = logic.get_active_keyboard(user)
+        return
+
     text = message.text
+    logic.check_story(user)
+    options = logic.get_active_keyboard(user)
 
     if logic.back_key(user, text):
         logic.main_keyboard(user)
@@ -95,9 +98,11 @@ def bot_send(user, text):
     bot.send_message(user.chat_id, text)
 
 
-# bot.polling(none_stop=True, interval=0)
+bot.polling(none_stop=True, interval=0)
+'''
 while True:
     try:
         bot.polling()
     except:
         logic.save_from_stack_to_db()
+'''
