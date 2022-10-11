@@ -53,8 +53,8 @@ def key_check(options, text, user):
     elif set(options).issubset(upgrade_options):
         upgrade_key(user, text)
 
-    #elif set(options).issubset(story_options):
-        #story_block.(user, text)
+    elif set(options).issubset(story_options):
+        story_block.key(user, text)
 
     else:
         undefait_text(user)
