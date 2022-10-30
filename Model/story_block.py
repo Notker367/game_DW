@@ -4,7 +4,8 @@ from View import Texts, bot_send
 available_buttons = {'story0': ['continue_story',
                                 'skip_story',
                                 'continue'],
-                     'story1': ['work']
+                     'story1': ['work',
+                                'heal_hum']
                      }
 
 
@@ -32,7 +33,7 @@ def key(user: roles.User, text: str):
         if continue_story:
             set_story(user, '0 continue_story', 'story1')
             bot_send.message(user, Texts.Story_text.story1)
-            logic.set_active_keyboard(user, logic.main_keyboard(user))
+            logic.main_keyboard(user)
         if skip_story:
             pass
 
