@@ -128,11 +128,11 @@ def welcome(user: roles.User):
     options = get_active_keyboard(user)
 
     if not options:
-        keyboard = keyboards.keyboard_create(main_options)
+        keyboard = keyboards.keyboard_create(main_options, user)
         set_active_keyboard(user, main_options)
 
     else:
-        keyboard = keyboards.keyboard_create(options)
+        keyboard = keyboards.keyboard_create(options, user)
     bot_send.update_keyboard(user, callbacks.text_welcome(user), keyboard)
 
 
@@ -400,21 +400,21 @@ def main_key(user, text):
 
 def upgrade_keyboard(user, necr):
     options = upgrade_options
-    keyboard = keyboards.keyboard_create(options)
+    keyboard = keyboards.keyboard_create(options, user)
     bot_send.update_keyboard(user, callbacks.upgrade_text(necr), keyboard)
     set_active_keyboard(user, options)
 
 
 def work_keyboard(user):
     options = work_options
-    keyboard = keyboards.keyboard_create(options)
+    keyboard = keyboards.keyboard_create(options, user)
     bot_send.update_keyboard(user, Text_for.keyboards.get('work'), keyboard)
     set_active_keyboard(user, options)
 
 
 def necromancy_keyboard(user, necr):
     options = necromancy_options
-    keyboard = keyboards.keyboard_create(options)
+    keyboard = keyboards.keyboard_create(options, user)
     bot_send.update_keyboard(user, callbacks.necromancy_text(necr), keyboard)
     set_active_keyboard(user, options)
 
@@ -495,7 +495,7 @@ def work_key(user, text):
 
 def main_keyboard(user):
     options = main_options
-    keyboard = keyboards.keyboard_create(options)
+    keyboard = keyboards.keyboard_create(options, user)
     bot_send.update_keyboard(user, Text_for.keyboards.get('main'), keyboard)
     set_active_keyboard(user, options)
 
@@ -568,7 +568,7 @@ def undefait_text(user):
     actual_keyboard = necr.get_keyboard()
 
     if actual_keyboard:
-        keyboard = keyboards.keyboard_create(actual_keyboard)
+        keyboard = keyboards.keyboard_create(actual_keyboard, user)
     else:
         keyboard = keyboards.keyboard_create(['start'])
 

@@ -1,8 +1,41 @@
 from Model import roles, logic
-import time
+from View import Texts, bot_send
+
+available_buttons = {'story0': ['continue_story',
+                                'skip_story',
+                                'continue'],
+                     'story1': ['work']
+                     }
+
+
+def buttons_for_story(buttons, user):
+    story = get_story(user)
+    part = story.part
+
+    new_buttons = []
+
+    for button in buttons:
+        if button in available_buttons[part]:
+            new_buttons += [button]
+
+    return new_buttons
 
 
 def key(user: roles.User, text: str):
+    story = get_story(user)
+    part = story.part
+
+    continue_story = text == Texts.Text_for.button['continue_story']
+    skip_story = text == Texts.Text_for.button['skip_story']
+
+    if part == 'story0':
+        if continue_story:
+            set_story(user, '0 continue_story', 'story1')
+            bot_send.message(user, Texts.Story_text.story1)
+            logic.set_active_keyboard(user, logic.main_keyboard(user))
+        if skip_story:
+            pass
+
     pass
 
 
@@ -19,7 +52,7 @@ def set_story(user: roles.User, choice, part):
 
 def check(story: roles.Story):
     part = story.part
-    if part is 'story1':
+    if part == 'story1':
         pass
 
 

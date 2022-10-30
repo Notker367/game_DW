@@ -17,11 +17,14 @@ class Text_for:
 
     button = {'kill_hum': 'Убить пациента',
               'heal_hum': 'Вылечить пациента',
+
               'work': 'Госпиталь',
               'bones_to_skeleton': 'Создать прислужника',
+
               'to_farmer': 'Разведка',
               'to_defer': 'Защита',
               'to_attacker': 'Атака',
+
               'info_necr': 'info-инвентарь',
               'necromancy': 'Некромантия',
               'skills': 'Навыки',
@@ -29,9 +32,11 @@ class Text_for:
               'skel_work': 'Направить скелетов',
               'upgrade': 'Рынок',
               'back': 'Назад',
+
               'up_basement': f'Расширить подвал',
               'up_chest': f'Купить сундук',
               'up_lvl': f'Заняться расшифровкой',
+
               'continue': 'Продолжить',
               'skip': 'Пропустить',
               'continue_story': 'Узнать историю',

@@ -1,4 +1,5 @@
 import telebot as bot
+from Model import story_block
 
 from View import Texts
 
@@ -7,7 +8,9 @@ text_button = Texts.Text_for.button
 text_event = Texts.Text_for.event_button
 
 
-def keyboard_create(buttons=[]):
+def keyboard_create(buttons=[], user=None):
+    if user:
+        buttons = story_block.buttons_for_story(buttons, user)
     print(f'Создаю клавиатуру с {buttons}')
     keyboard = bot.types.ReplyKeyboardMarkup(resize_keyboard=True)
     if 'info_user' in buttons:
@@ -247,4 +250,3 @@ def keyboard_story_create(buttons=[]):
         keyboard.add(but)
 
     return keyboard
-
