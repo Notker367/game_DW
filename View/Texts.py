@@ -15,32 +15,33 @@ class Text_for:
             "...defer <count> \n" \
             "...attacker <count>\n"
 
-    button = {'kill_hum': 'Убить пациента',
+    button = {'work': 'Госпиталь',
+              'info_necr': 'info-инвентарь',
+              'necromancy': 'Некромантия',
+              'upgrade': 'Рынок',
+
+              'kill_hum': 'Убить пациента',
               'heal_hum': 'Вылечить пациента',
 
-              'work': 'Госпиталь',
               'bones_to_skeleton': 'Создать прислужника',
-
               'to_farmer': 'Разведка',
               'to_defer': 'Защита',
               'to_attacker': 'Атака',
-
-              'info_necr': 'info-инвентарь',
-              'necromancy': 'Некромантия',
-              'skills': 'Навыки',
               'to_reset': 'Вернуть скелетов',
-              'skel_work': 'Направить скелетов',
-              'upgrade': 'Рынок',
-              'back': 'Назад',
 
               'up_basement': f'Расширить подвал',
               'up_chest': f'Купить сундук',
               'up_lvl': f'Заняться расшифровкой',
 
+              'back': 'Назад',
+
               'continue': 'Продолжить',
               'skip': 'Пропустить',
               'continue_story': 'Узнать историю',
-              'skip_story': 'Пропустить вступление'
+              'skip_story': 'Пропустить вступление',
+
+              'skills': 'Навыки',
+              'skel_work': 'Направить скелетов'
               }
 
     Error = {'no_energy': 'Не хватает энергии',

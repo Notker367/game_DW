@@ -15,10 +15,6 @@ request_text = {}
 users_time = {}
 need_event = False
 
-story_options = {'continue_story',
-                 'skip_story',
-                 'continue'}
-
 main_options = ['info_necr',
                 'work',
                 'necromancy', 'upgrade']
@@ -35,6 +31,10 @@ upgrade_options = ['up_basement',
                    'up_chest',
                    'up_lvl',
                    'back']
+
+story_options = {'continue_story',
+                 'skip_story',
+                 'continue'}
 
 
 def key_check(options, text, user):

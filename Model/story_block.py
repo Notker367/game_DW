@@ -1,11 +1,31 @@
 from Model import roles, logic
 from View import Texts, bot_send
 
-available_buttons = {'story0': ['continue_story',
-                                'skip_story',
-                                'continue'],
+# story№ : [story_options,
+#         main_options,
+#         work_options,
+#         necromancy_options,
+#         upgrade_options]
+available_buttons = {'story0': ['continue_story', 'skip_story'],
                      'story1': ['work',
-                                'heal_hum']
+                                'heal_hum'],
+                     'story2': ['work',
+                                'kill_hum'],
+                     'story3': ['work', 'necromancy',
+                                'heal_hum', 'kill_hum',
+                                'back'],
+                     'story4': ['work', 'necromancy',
+                                'heal_hum', 'kill_hum',
+                                'bones_to_skeleton', 'to_farmer',
+                                'back'],
+                     'story5': ['work', 'necromancy',
+                                'heal_hum', 'kill_hum',
+                                'bones_to_skeleton', 'to_farmer', 'to_defer',
+                                'back'],
+                     'story6': ['work', 'necromancy',
+                                'heal_hum', 'kill_hum',
+                                'bones_to_skeleton', 'to_farmer', 'to_defer', 'to_attacker',
+                                'back']
                      }
 
 
