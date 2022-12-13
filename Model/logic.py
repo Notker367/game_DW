@@ -384,8 +384,8 @@ def main_key(user, text):
         if have_energy:
             work_keyboard(user)
         else:
-            story_step(user)
-            bot_send.message(user, Text_for.Error.get('no_energy'))
+            if not story_next_step(user):
+                bot_send.message(user, Text_for.Error.get('no_energy'))
 
     elif text == Text_for.button['necromancy']:
         necromancy_keyboard(user, necr)
@@ -604,8 +604,10 @@ def view_stack():
     print(user_list)
 
 
-def story_step(user: roles.User):
-    chat_id = user.chat_id
-    story = get_story_from_stack(chat_id)
+def story_next_step(user: roles.User):
+    story = story_block.get_story(user)
 
-    story_block.check(story)
+    return story_block.check(story, user)
+
+
+

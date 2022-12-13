@@ -56,8 +56,8 @@ def key(user: roles.User, text: str):
             logic.main_keyboard(user)
         if skip_story:
             pass
-
-    pass
+    if part == 'story1_1':
+        pass
 
 
 def get_story(user: roles.User):
@@ -71,14 +71,20 @@ def set_story(user: roles.User, choice, part):
     story.part = part
 
 
-def check(story: roles.Story):
+def check(story: roles.Story, user: roles.User):
     part = story.part
     if part == 'story1':
-        pass
+        # в этой части юзер знакомится с семьей некромантов,
+        # его везут туда при выходе из дома по пути в госпиталь
+        return story1(story,user)
+    else:
+        return False
 
 
-def story1(story: roles.Story):
-    pass
+def story1(story: roles.Story, user: roles.User):
+    bot_send.message(user, Texts.Story_text.story1_1)
+    set_story(user, '1 next', 'story1_1')
+    return True
 
 
 def story2(story: roles.Story):
