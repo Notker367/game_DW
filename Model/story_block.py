@@ -25,7 +25,13 @@ available_buttons = {'story0': ['continue_story', 'skip_story'],
                      'story6': ['work', 'necromancy',
                                 'heal_hum', 'kill_hum',
                                 'bones_to_skeleton', 'to_farmer', 'to_defer', 'to_attacker',
-                                'back']
+                                'back'],
+                     'story_main': ['info_necr',
+                                    'work', 'necromancy', 'upgrade',
+                                    'heal_hum', 'kill_hum',
+                                    'bones_to_skeleton', 'to_farmer', 'to_defer', 'to_attacker',
+                                    'up_basement', 'up_chest', 'up_lvl',
+                                    'back']
                      }
 
 
@@ -55,7 +61,10 @@ def key(user: roles.User, text: str):
             bot_send.message(user, Texts.Story_text.story1)
             logic.main_keyboard(user)
         if skip_story:
-            pass
+            set_story(user, '0 continue_story', 'story_main')
+            bot_send.message(user, Texts.Story_text.story_main)
+            logic.main_keyboard(user)
+
     if part == 'story1_1':
         pass
 
@@ -76,7 +85,7 @@ def check(story: roles.Story, user: roles.User):
     if part == 'story1':
         # в этой части юзер знакомится с семьей некромантов,
         # его везут туда при выходе из дома по пути в госпиталь
-        return story1(story,user)
+        return story1(story, user)
     else:
         return False
 
