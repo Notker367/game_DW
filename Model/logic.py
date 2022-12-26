@@ -171,6 +171,11 @@ def kill_human(necr: roles.Necromant):
     necr.add_bones(balance.bones_for_kill_human)
 
 
+def add_energy(user: roles.User, count=1):
+    chat_id = user.chat_id
+    necr = get_necr_from_stack(chat_id)
+    necr.add_energy(count)
+
 def heal_hum(me):
     me.take_energy()
     me.add_gold(balance.gold_for_work)
@@ -608,6 +613,3 @@ def story_next_step(user: roles.User):
     story = story_block.get_story(user)
 
     return story_block.check(story, user)
-
-
-

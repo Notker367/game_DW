@@ -1,5 +1,6 @@
 from Model import roles, logic
 from View import Texts, bot_send
+import time
 
 # story№ : [story_options,
 #         main_options,
@@ -13,6 +14,7 @@ available_buttons = {'story0': ['continue_story', 'skip_story'],
                                 'kill_hum'],
                      'story3': ['work', 'necromancy',
                                 'heal_hum', 'kill_hum',
+                                'bones_to_skeleton',
                                 'back'],
                      'story4': ['work', 'necromancy',
                                 'heal_hum', 'kill_hum',
@@ -64,6 +66,7 @@ def key(user: roles.User, text: str):
             set_story(user, '0 continue_story', 'story_main')
             bot_send.message(user, Texts.Story_text.story_main)
             logic.main_keyboard(user)
+            logic.add_energy(user, 30)
 
     if part == 'story1_1':
         pass
@@ -92,7 +95,11 @@ def check(story: roles.Story, user: roles.User):
 
 def story1(story: roles.Story, user: roles.User):
     bot_send.message(user, Texts.Story_text.story1_1)
-    set_story(user, '1 next', 'story1_1')
+    time.sleep(2)
+    bot_send.message(user, Texts.Story_text.story1_2)
+    set_story(user, '1 next', 'story2')
+    logic.main_keyboard(user)
+    logic.add_energy(user, 2)
     return True
 
 
