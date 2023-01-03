@@ -34,7 +34,14 @@ upgrade_options = ['up_basement',
 
 story_options = {'continue_story',
                  'skip_story',
-                 'continue'}
+                 'continue',
+
+                 'story2_heal',
+                 'story2_kill',
+                 'story2_skelet',
+                 'story2_kill_doc',
+                 'story2_call_doc'
+                 }
 
 
 def key_check(options, text, user):
@@ -175,6 +182,7 @@ def add_energy(user: roles.User, count=1):
     chat_id = user.chat_id
     necr = get_necr_from_stack(chat_id)
     necr.add_energy(count)
+
 
 def heal_hum(me):
     me.take_energy()
@@ -421,6 +429,12 @@ def necromancy_keyboard(user, necr):
     options = necromancy_options
     keyboard = keyboards.keyboard_create(options, user)
     bot_send.update_keyboard(user, callbacks.necromancy_text(necr), keyboard)
+    set_active_keyboard(user, options)
+
+
+def story_keyboard(user, options, story_text):
+    keyboard = keyboards.keyboard_create(options, user)
+    bot_send.update_keyboard(user, story_text, keyboard)
     set_active_keyboard(user, options)
 
 
