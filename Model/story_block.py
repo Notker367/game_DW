@@ -98,11 +98,7 @@ def key(user: roles.User, text: str):
     if part == 'story2_2':
         if story2_skelet:
             set_story(user, '2 story2_skelet', 'story2_3')
-            bot_send.message(user, Texts.Story_text.story2_3)
-        if story2_kill_doc:
-            set_story(user, '2 story2_skelet', 'story2_3')
-            bot_send.message(user, Texts.Story_text.story2_3)
-        logic.story_keyboard(user, story2_options['story2_3'], Texts.Story_text.story2_2)
+        logic.story_keyboard(user, story2_options['story2_3'], Texts.Story_text.story2_3)
 
     if part == 'story2_3':
         if story2_kill_doc:
@@ -121,6 +117,8 @@ def get_story(user: roles.User):
 
 def set_story(user: roles.User, choice, part):
     story = get_story(user)
+
+    print(f"Изменяю историю у {user.chat_id} с {story.part} на {part} с выбором {choice}")
 
     story.choice += [choice]
     story.part = part
